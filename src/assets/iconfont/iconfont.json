@@ -1,0 +1,37 @@
+{
+  "id": "2915213",
+  "name": "breeze",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "760249",
+      "name": "qq",
+      "font_class": "qq",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "6337456",
+      "name": "插入链接",
+      "font_class": "charulianjie",
+      "unicode": "ec7f",
+      "unicode_decimal": 60543
+    },
+    {
+      "icon_id": "13253771",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "13253848",
+      "name": "mail",
+      "font_class": "mail",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    }
+  ]
+}

@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/view/Home'
+import Portal from '@/view/Portal'
 import Manage from '@/view/Manage'
+import Home from '@/components/Home'
+
+
 Vue.use(Router)
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -13,14 +16,20 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'portal',
+      component: Portal
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home,
-      children: []
+      path: '/portal',
+      name: 'portal',
+      component: Portal,
+      children: [
+        {
+          path: '/portal/home',
+          name: 'home',
+          component: Home,
+        }
+      ]
     },
     {
       path: '/manage',

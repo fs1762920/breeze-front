@@ -4,7 +4,57 @@
             title="操作记录"
             :visible.sync="showOperationDrawer"
             direction="rtl">
-            <div class="operation-list"></div>
+            <div class="operation-list">
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">又见炊烟</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+                <div class="operation-item">
+                    <div class="info">
+                        <div class="title">文章修改</div>
+                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    </div>
+                    <div class="date">2021-11-21 12:53:11</div>
+                </div>
+            </div>
             <div class="operation-page">
                 <el-pagination
                     layout="prev, pager, next"
@@ -133,9 +183,43 @@ export default {
 <style lang="less" scoped>
     .statistics-main {
         min-height: 100vh;
+        /deep/.el-drawer__header {
+            padding: 0 20px 0 20px;
+            height: 48px;
+            line-height: 48px;
+            margin: 0;
+            border-bottom: 1px solid rgb(216, 216, 216);
+        }
         .operation-list {
+            padding: 20px;
             .operation-item {
-
+                height: 70px;
+                &:nth-of-type(n+1){
+                    border-bottom: 1px solid rgb(228, 228, 228);
+                }
+                .info {
+                    height: 40px;
+                    line-height: 40px;
+                    display: flex;
+                    .title {
+                        width: 40%;
+                    }
+                    .subject {
+                        text-align: right;
+                        width: 60%;
+                        color: rgb(131, 131, 131);
+                        padding-left: 40px;
+                        white-space: nowrap;   //规定段落中的文本不进行换行
+                        text-overflow:ellipsis;
+                        overflow:hidden;
+                    }
+                }
+                .date {
+                    font-size: 0.8rem;
+                    color: rgb(131, 131, 131);
+                    height: 20px;
+                    line-height: 20px;
+                }
             }
         }
         .operation-page {

@@ -62,7 +62,7 @@
             </el-form>
         </el-drawer>
         <div class="head">
-            <el-input v-model="blogInfo.title" placeholder="文章标题"></el-input>
+            <el-input v-model="blogInfo.title" style="width: 100%" placeholder="文章标题"></el-input>
             <el-button type="danger">保存草稿</el-button>
             <el-button type="primary" @click="showEssaySetting()">发布</el-button>
         </div>

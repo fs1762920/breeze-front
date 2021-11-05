@@ -194,8 +194,8 @@ export default {
             padding: 20px;
             .operation-item {
                 height: 70px;
-                &:nth-of-type(n+1){
-                    border-bottom: 1px solid rgb(228, 228, 228);
+                &:nth-child(n+2){
+                    border-top: 1px solid rgb(228, 228, 228);
                 }
                 .info {
                     height: 40px;
@@ -295,8 +295,8 @@ export default {
                             display: flex;
                             height: 40px;
                             line-height: 40px;
-                            &:nth-of-type(n+1){
-                                border-bottom: 1px solid rgb(228, 228, 228);
+                            &:nth-child(n+2){
+                                border-top: 1px solid rgb(228, 228, 228);
                             }
                             .title {
                                 width: 60%;

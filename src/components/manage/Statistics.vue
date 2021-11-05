@@ -149,6 +149,7 @@ export default {
                     height: 100px;
                     background-color: white;
                     padding: 20px;
+                    box-shadow: 1px 1px 8px #c7c7c7;
                     .head {
                         height: 36px;
                         .title {
@@ -177,6 +178,7 @@ export default {
                 .website-item {
                     height: 100%;
                     background-color: white;
+                    box-shadow: 1px 1px 8px #c7c7c7;
                     /deep/.el-tabs__item {
                         height: 48px;
                         line-height: 48px;

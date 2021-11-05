@@ -82,7 +82,7 @@ export default {
 <style lang="less" scoped>
     .time-main {
         background-color: rgba(255, 255, 255);
-        border-radius: 5px;
+        border-radius: 4px;
         padding: 40px;
         margin-top: 20px;
         .timeline {

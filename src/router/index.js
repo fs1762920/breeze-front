@@ -4,6 +4,8 @@ import Portal from '@/view/Portal'
 import Manage from '@/view/Manage'
 import Home from '@/components/portal/Home'
 import Time from '@/components/portal/Time'
+import Friend from '@/components/portal/Friend'
+import About from '@/components/portal/About'
 
 
 Vue.use(Router)
@@ -34,6 +36,16 @@ export default new Router({
           path: '/portal/time',
           name: 'time',
           component: Time,
+        },
+        {
+          path: '/portal/friend',
+          name: 'friend',
+          component: Friend,
+        },
+        {
+          path: '/portal/about',
+          name: 'about',
+          component: About,
         }
       ]
     },

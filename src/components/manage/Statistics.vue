@@ -69,7 +69,18 @@
             <el-col :span="8">
                 <div class="website-item">
                     <el-tabs type="border-card">
-                        <el-tab-pane label="最近文章">最近文章</el-tab-pane>
+                        <el-tab-pane label="最近文章">
+                            <div class="essay-group">
+                                <div class="essay-item">
+                                    <div class="title">对img设置竖直方向对齐为middle</div>
+                                    <div class="date">2021-11-05 12:11:31</div>
+                                </div>
+                                <div class="essay-item">
+                                    <div class="title">对img设置竖直方向对齐为middle</div>
+                                    <div class="date">2021-11-05 12:11:31</div>
+                                </div>
+                            </div>
+                        </el-tab-pane>
                         <el-tab-pane label="最新评论">最新评论</el-tab-pane>
                     </el-tabs>
                 </div>
@@ -189,6 +200,27 @@ export default {
                         padding: 0 20px 0 20px;
                         height: 48px;
                         line-height: 48px;
+                    }
+                    .essay-group {
+                        .essay-item {
+                            cursor: pointer;
+                            color: rgb(102, 102, 102);
+                            padding: 0 10px 0 10px;
+                            display: flex;
+                            height: 36px;
+                            line-height: 36px;
+                            .title {
+                                width: 60%;
+                                &:hover {
+                                    color: rgb(151, 151, 255);
+                                }
+                            }
+                            .date {
+                                width: 40%;
+                                font-size: 0.8rem;
+                                text-align: right;
+                            }
+                        }
                     }
                 }
             }

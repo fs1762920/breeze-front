@@ -2,10 +2,23 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Portal from '@/view/Portal'
 import Manage from '@/view/Manage'
+
 import Home from '@/components/portal/Home'
 import Time from '@/components/portal/Time'
 import Friend from '@/components/portal/Friend'
 import About from '@/components/portal/About'
+
+import Attach from '@/components/manage/Attach'
+import Classify from '@/components/manage/Classify'
+import Comment from '@/components/manage/Comment'
+import Compose from '@/components/manage/Compose'
+import Essay from '@/components/manage/Essay'
+import Label from '@/components/manage/Label'
+import Page from '@/components/manage/Page'
+import Statistics from '@/components/manage/Statistics'
+import Tool from '@/components/manage/Tool'
+import Webmaster from '@/components/manage/Webmaster'
+import Website from '@/components/manage/Website'
 
 
 Vue.use(Router)
@@ -53,7 +66,63 @@ export default new Router({
       path: '/manage',
       name: 'manage',
       component: Manage,
-      children: []
+      children: [
+        {
+          path: '/manage/attach',
+          name: 'attach',
+          component: Attach,
+        },
+        {
+          path: '/manage/classify',
+          name: 'classify',
+          component: Classify,
+        },
+        {
+          path: '/manage/comment',
+          name: 'comment',
+          component: Comment,
+        },
+        {
+          path: '/manage/compose',
+          name: 'compose',
+          component: Compose,
+        },
+        {
+          path: '/manage/essay',
+          name: 'essay',
+          component: Essay,
+        },
+        {
+          path: '/manage/label',
+          name: 'label',
+          component: Label,
+        },
+        {
+          path: '/manage/page',
+          name: 'page',
+          component: Page,
+        },
+        {
+          path: '/manage/statistics',
+          name: 'statistics',
+          component: Statistics,
+        },
+        {
+          path: '/manage/tool',
+          name: 'tool',
+          component: Tool,
+        },
+        {
+          path: '/manage/webmaster',
+          name: 'webmaster',
+          component: Webmaster,
+        },
+        {
+          path: '/manage/website',
+          name: 'website',
+          component: Website,
+        }
+      ]
     }
   ]
 })

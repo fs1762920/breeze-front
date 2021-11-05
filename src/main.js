@@ -7,6 +7,7 @@ import Vuex from 'vuex';
 import store from './store/index'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import vuetimeline from "@growthbunker/vuetimeline"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import JsonViewer from 'vue-json-viewer'
@@ -19,6 +20,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuex);
 Vue.use(ElementUI);
 Vue.use(mavonEditor);
+Vue.use(vuetimeline);
 Vue.use(JsonViewer);
 
 Vue.prototype.$moment = moment;

@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Portal from '@/view/Portal'
 import Manage from '@/view/Manage'
-import Home from '@/components/Home'
+import Home from '@/components/portal/Home'
+import Time from '@/components/portal/Time'
 
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ export default new Router({
           path: '/portal/home',
           name: 'home',
           component: Home,
+        },
+        {
+          path: '/portal/time',
+          name: 'time',
+          component: Time,
         }
       ]
     },

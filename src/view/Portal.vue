@@ -4,10 +4,10 @@
             <div class="head">
                 <div class="nav">
                     <el-menu default-active="1" mode="horizontal">
-                        <el-menu-item index="1">首页</el-menu-item>
-                        <el-menu-item index="2">友情链接</el-menu-item>
-                        <el-menu-item index="3">文章归档</el-menu-item>
-                        <el-menu-item index="4">关于</el-menu-item>
+                        <el-menu-item index="1" @click="toDispatch('/portal/home')">首页</el-menu-item>
+                        <el-menu-item index="2" @click="toDispatch('/portal/friend')">友情链接</el-menu-item>
+                        <el-menu-item index="3" @click="toDispatch('/portal/time')">文章归档</el-menu-item>
+                        <el-menu-item index="4" @click="toDispatch('/portal/about')">关于</el-menu-item>
                     </el-menu>
                 </div>
                 <div class="operate-group">
@@ -21,7 +21,7 @@
             <div class="main-left">
                 <div class="master-info">
                     <div class="avatar">
-                        <el-avatar :size="120" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <el-avatar :size="120" :src="require('../assets/avatar.jpg')"></el-avatar>
                     </div>
                     <div class="content">
                         <div class="nickname">又见炊烟</div>
@@ -126,6 +126,12 @@ export default {
     },
     mounted() {
         this.$router.replace('/portal/home')
+    },
+    methods: {
+        toDispatch(url) {
+            this.$router.push(url)
+            window.scrollTo(0, 0)
+        }
     }
 }
 

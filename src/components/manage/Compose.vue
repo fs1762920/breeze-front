@@ -59,7 +59,6 @@
                     <el-button type="primary" style="float: right; margin-left: 10px">发布</el-button>
                     <el-button type="danger" style="float: right">保存草稿</el-button>
                 </el-form-item>
-                
             </el-form>
         </el-drawer>
         <div class="head">

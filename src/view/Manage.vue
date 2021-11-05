@@ -62,9 +62,9 @@
                         <span slot="title">&nbsp;关于我</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-menu-item index="4" @click="toDispatch('/manage/attach')">
+                <el-menu-item index="4" @click="toDispatch('/manage/photo')">
                     <i class="iconfont icon-icon"></i>
-                    <span slot="title">&nbsp;附件</span>
+                    <span slot="title">&nbsp;相册</span>
                 </el-menu-item>
                 <el-menu-item index="5" @click="toDispatch('/manage/comment')">
                     <i class="iconfont icon-pinglun"></i>

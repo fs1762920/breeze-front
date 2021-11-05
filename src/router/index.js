@@ -8,7 +8,7 @@ import Time from '@/components/portal/Time'
 import Friend from '@/components/portal/Friend'
 import About from '@/components/portal/About'
 
-import Attach from '@/components/manage/Attach'
+import Photo from '@/components/manage/Photo'
 import Classify from '@/components/manage/Classify'
 import Comment from '@/components/manage/Comment'
 import Compose from '@/components/manage/Compose'
@@ -68,9 +68,9 @@ export default new Router({
       component: Manage,
       children: [
         {
-          path: '/manage/attach',
-          name: 'attach',
-          component: Attach,
+          path: '/manage/photo',
+          name: 'photo',
+          component: Photo,
         },
         {
           path: '/manage/classify',

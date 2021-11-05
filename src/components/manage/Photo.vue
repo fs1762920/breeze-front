@@ -1,5 +1,5 @@
 <template>
-    <div>附件管理</div>
+    <div>相册管理</div>
 </template>
 <script>
 export default {

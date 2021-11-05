@@ -293,8 +293,11 @@ export default {
                             color: rgb(102, 102, 102);
                             padding: 0 10px 0 10px;
                             display: flex;
-                            height: 36px;
-                            line-height: 36px;
+                            height: 40px;
+                            line-height: 40px;
+                            &:nth-of-type(n+1){
+                                border-bottom: 1px solid rgb(228, 228, 228);
+                            }
                             .title {
                                 width: 60%;
                                 &:hover {

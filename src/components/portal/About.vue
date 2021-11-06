@@ -1,11 +1,9 @@
 <template>
     <div class="about-main">
-        <div class="info">
-            <div class="title">关于我</div>
-        </div>
+        <div class="title">关于我</div>
         <div class="comment-group">
             <div class="comment-avatar">
-                <el-avatar shape="square" :size="116" :src="require('../../assets/avatar.jpg')"></el-avatar>
+                <el-avatar shape="square" :size="120" :src="require('../../assets/avatar.jpg')"></el-avatar>
             </div>
             <div class="comment-form">
                 <el-form ref="commentForm" :rules="rules" :model="commentForm" label-width="60px">
@@ -157,15 +155,13 @@ export default {
 </script>
 <style lang="less" scoped>
     .about-main{
-        .info {
+        .title {
             background-color: rgba(255, 255, 255);
             border-radius: 4px;
             padding: 20px;
             margin-top: 20px;
-            .title {
-                font-size: 1.6rem;
-                padding-left: 20px;
-            }
+            font-size: 1.6rem;
+            padding-left: 20px;
         }
         .comment-group {
             background-color: rgba(255, 255, 255);
@@ -174,11 +170,14 @@ export default {
             margin-top: 20px;
             display: flex;
             .comment-avatar {
-                width: 6vw;
+                width: 120px;
                 .el-avatar {
                     border: 1px dashed rgb(112, 112, 112);
                     cursor: pointer;
                 }
+            }
+            .comment-form {
+                margin-left: 10px;
             }
         }
         .comment-area {

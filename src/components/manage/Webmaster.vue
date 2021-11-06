@@ -8,13 +8,13 @@
                 <div class="webmaster-nickname">又见炊烟</div>
                 <div class="webmaster-contact">
                     <div class="webmaster-contact-item">
-                        <i class="iconfont icon-charulianjie"></i>&nbsp;&nbsp;<el-link type="primary" href="http://localhost:8080/portal" :underline="false">http://localhost:8080/portal</el-link>
+                        <i class="el-icon-link"></i>&nbsp;&nbsp;<el-link type="primary" href="http://localhost:8080/portal" :underline="false">http://localhost:8080/portal</el-link>
                     </div>
                     <div class="webmaster-contact-item">
-                        <i class="iconfont icon-mail"></i>&nbsp;&nbsp;fs1762920@163.com
+                        <i class="el-icon-message"></i>&nbsp;&nbsp;fs1762920@163.com
                     </div>
                     <div class="webmaster-contact-item">
-                        <i class="iconfont icon-mail"></i>&nbsp;&nbsp;870天
+                        <i class="el-icon-date"></i>&nbsp;&nbsp;870天
                     </div>
                 </div>
                 <el-divider></el-divider>
@@ -153,6 +153,9 @@ export default {
                         font-size: 0.8rem;
                         height: 30px;
                         line-height: 30px;
+                        i {
+                            font-size: 1rem;
+                        }
                     }
                 }
                 .operate-record {

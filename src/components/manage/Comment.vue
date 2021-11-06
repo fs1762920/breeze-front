@@ -107,51 +107,53 @@ export default {
     data() {
         return {
             commentList: [
-                // {   
-                //     commentId: 1,
-                //     belongBlog: "SpringBoot之定时任务",
-                //     nickname: "法外狂徒张三",
-                //     mail: "fs1762920@163.com",
-                //     createDate: "2021-12-02 21:10:12",
-                //     content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
-                //     ip: "113.12.85.2",
-                //     replyList: [
-                //         {
-                //             commentId: 3,
-                //             nickname: "法外狂徒张三",
-                //             mail: "fs1762920@163.com",
-                //             createDate: "2021-12-02 21:10:12",
-                //             content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
-                //             ip: "113.12.85.2"
-                //         },
-                //         {
-                //             commentId: 2,
-                //             nickname: "法外狂徒张三",
-                //             mail: "fs1762920@163.com",
-                //             createDate: "2021-12-02 21:10:12",
-                //             content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
-                //             ip: "113.12.85.2"
-                //         }
-                //     ]
-                // },
-                // {   
-                //     commentId: 2,
-                //     belongBlog: "SpringBoot之定时任务",
-                //     nickname: "法外狂徒张三",
-                //     mail: "fs1762920@163.com",
-                //     createDate: "2021-12-02 21:10:12",
-                //     content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
-                //     ip: "113.12.85.2"
-                // },
-                // {   
-                //     commentId: 3,
-                //     belongBlog: "SpringBoot之定时任务",
-                //     nickname: "法外狂徒张三",
-                //     mail: "fs1762920@163.com",
-                //     createDate: "2021-12-02 21:10:12",
-                //     content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
-                //     ip: "113.12.85.2"
-                // }
+                {   
+                    commentId: 1,
+                    belongBlog: "SpringBoot之定时任务",
+                    nickname: "法外狂徒张三",
+                    mail: "fs1762920@163.com",
+                    createDate: "2021-12-02 21:10:12",
+                    content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
+                    ip: "113.12.85.2",
+                    replyList: [
+                        {
+                            commentId: 3,
+                            belongBlog: "SpringBoot之定时任务",
+                            nickname: "法外狂徒张三",
+                            mail: "fs1762920@163.com",
+                            createDate: "2021-12-02 21:10:12",
+                            content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
+                            ip: "113.12.85.2"
+                        },
+                        {
+                            commentId: 2,
+                            belongBlog: "SpringBoot之定时任务",
+                            nickname: "法外狂徒张三",
+                            mail: "fs1762920@163.com",
+                            createDate: "2021-12-02 21:10:12",
+                            content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
+                            ip: "113.12.85.2"
+                        }
+                    ]
+                },
+                {   
+                    commentId: 2,
+                    belongBlog: "SpringBoot之定时任务",
+                    nickname: "法外狂徒张三",
+                    mail: "fs1762920@163.com",
+                    createDate: "2021-12-02 21:10:12",
+                    content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
+                    ip: "113.12.85.2"
+                },
+                {   
+                    commentId: 3,
+                    belongBlog: "SpringBoot之定时任务",
+                    nickname: "法外狂徒张三",
+                    mail: "fs1762920@163.com",
+                    createDate: "2021-12-02 21:10:12",
+                    content: "只需要在类上加上@EnableScheduling，在方法上加上@Scheduled两个注解即可启用定时任务Spring Boot提供的定时任务存在的小坑",
+                    ip: "113.12.85.2"
+                }
             ]
             
         }

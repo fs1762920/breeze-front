@@ -5,7 +5,7 @@
         </div>
         <mavon-editor  
             :toolbars="toolbars"
-            style="height:90vh"
+            style="height: calc(100vh - 150px);"
             v-model="aboutInfo.content"
             @change="change"
             @imgAdd="handleEditorImgAdd"

@@ -20,7 +20,7 @@
                     毛泽东此文是为反对当时党内存在着的两种倾向而写的。当时党内的第一种倾向，以陈独秀为代表，只注意同国 民党合作，忘记了农民，这是右倾机会主义。第二种倾向，以张国焘为代表，只注意工人运动，同样忘记了农民，这是“左”倾机会主义。这两种机会主义都感觉自己力量不足，而不知道到何处去寻找力量，到何处去取得广大的同盟军。毛泽东指出中国无产阶级的最广大和最忠实的同盟军是农民，这样就解决了中国革命中的最主要的同盟军问题。毛泽东并且预见到当时的民族资产阶级是一个动摇的阶级，他们在革命高涨时将要分化，其右翼将要跑到帝国主义方面去。一九二七年所发生的事变，证明了这一点。
                 </div>
                 <div class="read">
-                    <el-button type="info" size="small" plain>阅读更多</el-button>
+                    <el-button type="info" size="small" plain @click="blogOverview(1)">阅读更多</el-button>
                 </div>
             </div>
         </div>
@@ -59,7 +59,22 @@
 </template>
 <script>
 export default {
-    
+    data() {
+         return {
+             
+         }
+    },
+    methods: {
+        blogOverview(id) {
+            let param = {
+                path: '/portal/view',
+                query: {
+                    blogId: id
+                }
+            }
+            this.$router.push(param)
+        }
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -70,7 +85,7 @@ export default {
             border-radius: 4px;
             box-shadow: 1px 1px 8px #c7c7c7;
             .cover {
-                height: 40vh;
+                height: 18vw;
                 cursor: pointer;
                 .el-image {
                     width: 100%;

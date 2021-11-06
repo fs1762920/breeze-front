@@ -123,6 +123,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .photo-main {
+        min-height: calc(100vh - 100px);
         .photo-detail {
             /deep/.el-drawer__header {
                 padding: 0 20px 0 20px;
@@ -171,12 +172,16 @@ export default {
                 }
                 .photo-item-body {
                     height: 90%;
+                    box-shadow: 1px 1px 8px #c7c7c7;
                     .el-image {
                         width: 100%;
                         height: 100%;
+                        border-radius: 4px 4px 0 0;
                     }
                 }
                 .photo-item-title {
+                    box-shadow: 1px 1px 8px #c7c7c7;
+                    border-radius: 0 0 4px 4px;
                     background-color: #ffffff;
                     height: 40px;
                     line-height: 40px;
@@ -191,7 +196,6 @@ export default {
         }
         .photo-page {
             float: right;
-            margin-bottom: 21vh;
         }
     }
 </style>

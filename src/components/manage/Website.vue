@@ -20,10 +20,12 @@ export default {
 </script>
 <style lang="less" scoped>
     .website-main {
-        height: 100vh;
+        min-height: calc(100vh - 100px);
         .website-overview {
             padding: 20px;
             background-color: #ffffff;
+            box-shadow: 1px 1px 8px #c7c7c7;
+            border-radius: 4px;
             .title {
                 padding-left: 20px;
                 padding-top: 20px;

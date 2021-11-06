@@ -1,6 +1,42 @@
 <template>
     <div class="friend-main">
-        <div class="title">友情链接</div>
+        <el-dialog
+            class="friend-form"
+            title="申请友链"
+            :visible.sync="friendApplyShow"
+            width="30%">
+            <el-form ref="friendForm" :model="friendInfo" label-width="80px">
+                <el-form-item label="昵称" prop="nickname">
+                    <el-input v-model="friendInfo.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="mail">
+                    <el-input v-model="friendInfo.mail"></el-input>
+                </el-form-item>
+                <el-form-item label="头像" prop="avatar">
+                    <el-upload
+                        class="avatar-uploader"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :show-file-list="false">
+                        <img v-if="friendInfo.avatar" :src="friendInfo.avatar" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="博客主页" prop="homePage">
+                    <el-input v-model="friendInfo.homePage"></el-input>
+                </el-form-item>
+                <el-form-item label="个性签名" prop="sign">
+                    <el-input type="textarea" :maxlength="50" :row="3" sho-word-limit v-model="friendInfo.sign"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <el-button type="">重置</el-button>
+                    <el-button type="primary">提交申请</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <div class="header">
+            <div class="title">友情链接</div>
+            <div class="apply"><el-button type="text" @click="friendApplyShow = true">申请友链</el-button></div>
+        </div>
         <div class="friend-group">
             <div class="friend-item">
                 <div class="avatar">
@@ -106,18 +142,59 @@
 </template>
 <script>
 export default {
-    
+    data() {
+        return {
+            friendApplyShow: false,
+            friendInfo: {}
+        }
+    }
 }
 </script>
 <style lang="less" scoped>
     .friend-main {
-        .title {
+        .friend-form {
+            /deep/.avatar-uploader .el-upload {
+                border: 1px dashed #d9d9d9;
+                border-radius: 6px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+            .avatar-uploader .el-upload:hover {
+                border-color: #409EFF;
+            }
+            .avatar-uploader-icon {
+                font-size: 28px;
+                color: #8c939d;
+                width: 178px;
+                height: 178px;
+                line-height: 178px;
+                text-align: center;
+            }
+            .avatar {
+                width: 178px;
+                height: 178px;
+                display: block;
+            }
+        }
+        .header {
             background-color: rgba(255, 255, 255);
             border-radius: 4px;
             padding: 20px;
             margin-top: 20px;
             font-size: 1.6rem;
             padding-left: 20px;
+            display: flex;
+            .title {
+                width: 70%;
+            }
+            .apply {
+                width: 30%;
+                .el-button {
+                    float: right;
+                }
+            }
+            
         }
         .friend-group {
             background-color: rgba(255, 255, 255);

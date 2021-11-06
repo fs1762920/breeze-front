@@ -148,8 +148,9 @@ export default {
 </script>
 <style lang="less" scoped>
     .essay-main {
-        min-height: 100vh;
+        min-height: calc(100vh - 100px);
         background-color: white;
+        box-shadow: 1px 1px 8px #c7c7c7;
         .search-group {
             padding: 20px
         }

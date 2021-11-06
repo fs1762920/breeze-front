@@ -39,7 +39,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .tool-main {
-        height: 100vh;
+        min-height: calc(100vh - 100px);
         .tool-detail {
             /deep/.el-drawer__header {
                 padding: 0 20px 0 20px;

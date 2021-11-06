@@ -170,7 +170,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .comment-main {
-        height: 100vh;
+        min-height: calc(100vh - 100px);
         .comment-page {
             float: right;
         }

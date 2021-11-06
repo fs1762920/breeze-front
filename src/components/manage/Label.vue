@@ -160,7 +160,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .label-main {
-        min-height: 100vh;
+        min-height: calc(100vh - 100px);
         width: 100%;
         display: flex;
         .label-form-pack {
@@ -168,6 +168,7 @@ export default {
             .label-form {
                 width: 100%;
                 background-color: #ffffff;
+                box-shadow: 1px 1px 8px #c7c7c7;
                 .title {
                     height: 48px;
                     line-height: 48px;
@@ -185,6 +186,7 @@ export default {
             .label-info {
                 width: 100%;
                 background-color: #ffffff;
+                box-shadow: 1px 1px 8px #c7c7c7;
                 .title {
                     height: 48px;
                     line-height: 48px;

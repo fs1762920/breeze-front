@@ -182,7 +182,7 @@ export default {
 </script>
 <style lang="less" scoped>
     .statistics-main {
-        min-height: 100vh;
+        min-height: calc(100vh - 100px);
         /deep/.el-drawer__header {
             padding: 0 20px 0 20px;
             height: 48px;

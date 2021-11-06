@@ -126,13 +126,14 @@ export default {
 <style lang="less" scoped>
     .webmaster-main {
         display: flex;
-        min-height: 100vh;
+        min-height: calc(100vh - 100px);
         .main-left-pack {
             width: 40%;
             padding-right: 20px;
             .main-left {
                 padding: 20px;
                 background-color: #ffffff;
+                box-shadow: 1px 1px 8px #c7c7c7;
                 .webmaster-avatar {
                     width: 100%;
                     padding-top: 20px;

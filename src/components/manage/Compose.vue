@@ -68,7 +68,7 @@
         </div>
         <mavon-editor  
             :toolbars="toolbars"
-            style="height:90vh"
+            style="height: calc(100vh - 150px);"
             v-model="blogInfo.content"
             @change="change"
             @imgAdd="handleEditorImgAdd"
@@ -183,6 +183,7 @@ export default {
         change(value, render) {
             this.blogInfo.content = value
             this.blogInfo.htmlContent = render
+            console.log(render)
         },
         //上传图片接口pos 表示第几个图片 
         handleEditorImgAdd(pos , $file){

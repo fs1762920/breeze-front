@@ -2,11 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Portal from '@/view/Portal'
 import Manage from '@/view/Manage'
+import Init from '@/view/Init'
+import Login from '@/view/Login'
 
 import Home from '@/components/portal/Home'
 import Time from '@/components/portal/Time'
 import Friend from '@/components/portal/Friend'
 import About from '@/components/portal/About'
+import View from '@/components/portal/View'
 
 import Photo from '@/components/manage/Photo'
 import Classify from '@/components/manage/Classify'
@@ -59,8 +62,23 @@ export default new Router({
           path: '/portal/about',
           name: 'about',
           component: About,
+        },
+        {
+          path: '/portal/view',
+          name: 'view',
+          component: View,
         }
       ]
+    },
+    {
+      path: '/init',
+      name: 'init',
+      component: Init
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/manage',

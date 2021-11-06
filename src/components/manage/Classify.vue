@@ -135,6 +135,7 @@ export default {
             width: 40%;
             .classify-form {
                 box-shadow: 1px 1px 8px #c7c7c7;
+                border-radius: 4px;
                 width: 100%;
                 background-color: #ffffff;
                 .title {
@@ -157,6 +158,7 @@ export default {
                 height: 100%;
                 background-color: #ffffff;
                 box-shadow: 1px 1px 8px #c7c7c7;
+                border-radius: 4px;
                 .title {
                     height: 48px;
                     line-height: 48px;

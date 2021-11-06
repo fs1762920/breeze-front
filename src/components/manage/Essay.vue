@@ -151,6 +151,7 @@ export default {
         min-height: calc(100vh - 100px);
         background-color: white;
         box-shadow: 1px 1px 8px #c7c7c7;
+        border-radius: 4px;
         .search-group {
             padding: 20px
         }

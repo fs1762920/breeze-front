@@ -43,13 +43,14 @@
             <div class="essay-table">
                 <el-table
                     :data="blogList"
+                    highlight-current-row
                     style="width: 100%">
                     <el-table-column
                         prop="title"
                         align="center"
                         show-overflow-tooltip
                         label="标题"
-                        width="480">
+                        min-width="300">
                     </el-table-column>
                     <el-table-column
                         prop="status"
@@ -67,7 +68,7 @@
                         prop="labelName"
                         align="center"
                         label="标签"
-                        width="480">
+                        min-width="240">
                     </el-table-column>
                     <el-table-column
                         prop="visitCount"

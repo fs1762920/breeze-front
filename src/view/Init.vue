@@ -49,6 +49,7 @@
                 <div class="upload">
                     <el-upload
                         drag
+                        disabled
                         action="https://jsonplaceholder.typicode.com/posts/"
                         multiple>
                         <i class="el-icon-upload"></i>
@@ -103,6 +104,7 @@ export default {
             left: 0; 
             bottom: 0; 
             right: 0;
+            box-shadow: 1px 1px 8px #c7c7c7;
             .init-enter-form {
                 padding: 20px 40px;
                 .note {

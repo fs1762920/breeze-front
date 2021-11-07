@@ -53,6 +53,7 @@ export default {
             right: 0;
             width: 16vw;
             height: 18vw;
+            box-shadow: 1px 1px 8px #c7c7c7;
             .header {
                 height: 60px;
                 line-height: 60px;

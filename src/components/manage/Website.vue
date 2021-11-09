@@ -5,7 +5,7 @@
             <el-divider></el-divider>
             <div class="website-info">
                 <div class="website-info-item">版本:&nbsp;&nbsp;1.0.0</div>
-                <div class="website-info-item">数据库:&nbsp;&nbsp;8.0.17 MySQL Community Server (GPL)</div>
+                <div class="website-info-item">数据库:&nbsp;&nbsp;5.7.22 MySQL Community Server (GPL)</div>
                 <div class="website-info-item">运行模式:&nbsp;&nbsp;production</div>
                 <div class="website-info-item">启动时间:&nbsp;&nbsp;2021-08-19 16:10:21</div>
             </div>

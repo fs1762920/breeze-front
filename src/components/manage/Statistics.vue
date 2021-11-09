@@ -152,12 +152,15 @@
             <el-col :span="8">
                 <div class="website-item">
                     <el-card class="box-card">
-                        <div slot="header" class="clearfix">
+                        <div slot="header">
                             <span>操作记录</span>
                             <el-button style="float: right;" @click="loadOperationList()" type="text">更多</el-button>
                         </div>
-                        <div>
-                            列表内容
+                        <div class="operate-group">
+                            <div class="operate-item">
+                                <div class="operate-left"></div>
+                                <div class="operate-right"></div>
+                            </div>
                         </div>
                     </el-card>
                 </div>
@@ -293,8 +296,8 @@ export default {
                             color: rgb(102, 102, 102);
                             padding: 0 10px 0 10px;
                             display: flex;
-                            height: 40px;
-                            line-height: 40px;
+                            height: 48px;
+                            line-height: 48px;
                             &:nth-child(n+2){
                                 border-top: 1px solid rgb(228, 228, 228);
                             }
@@ -310,6 +313,25 @@ export default {
                                 text-align: right;
                             }
                         }
+                    }
+                    .operate-group {
+                       .operate-item {
+                           height: 60px;
+                           .operate-left {
+                               .operate-action {
+                                   height: 36px;
+                                   line-height: 36px;
+                               }
+                               .operate-date {
+                                   height: 24px;
+                                   line-height: 24px;
+                               }
+
+                           }
+                           .operate-right {
+                               line-height: 60px;
+                           }
+                       } 
                     }
                 }
             }

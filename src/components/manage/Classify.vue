@@ -4,18 +4,27 @@
             <div class="classify-form">
                 <div class="title">添加分类</div>
                 <div class="body">
-                    <el-form ref="classifyForm" :model="classifyInfo" label-width="80px">
+                    <el-form ref="classifyForm" :model="classifyInfo" :rules="rules" label-width="80px">
                         <el-form-item v-show="false" label="分类id" prop="classifyId">
                             <el-input type="text" v-model="classifyInfo.classifyId" autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="分类名称" prop="classifyName">
                             <el-input v-model="classifyInfo.classifyName"></el-input>
                         </el-form-item>
+                        <el-form-item label="是否启用" prop="enabled">
+                            <el-switch
+                                :active-value="1"
+                                :inactive-value="0"
+                                v-model="classifyInfo.enabled"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                            </el-switch>
+                        </el-form-item>
                         <el-form-item label="分类描述" prop="classifyDescribe">
                             <el-input type=textarea v-model="classifyInfo.classifyDescribe"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="danger" size="small" style="float: right; margin-left: 20px">新增分类</el-button>
+                            <el-button type="danger" size="small" style="float: right; margin-left: 20px" @click="saveOrUpdate('classifyForm')">新增/编辑分类</el-button>
                             <el-button type="text" size="small" style="float: right;" @click="resetForm('classifyForm')">重置</el-button>
                         </el-form-item>
                     </el-form>
@@ -50,7 +59,7 @@
                                     :active-value="1"
                                     :inactive-value="0"
                                     @change="updateEnable(scope.row)"
-                                    v-model="scope.row.isValid"
+                                    v-model="scope.row.enabled"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949">
                                 </el-switch>
@@ -61,7 +70,7 @@
                             <template slot-scope="scope">
                                 <el-button
                                     size="mini"
-                                    @click="showEditDialog(scope.row)">编辑</el-button>
+                                    @click="toEdit(scope.row)">编辑</el-button>
                                 <el-button
                                     size="mini"
                                     type="danger"
@@ -73,7 +82,7 @@
                 <div class="page">
                     <el-pagination
                         layout="prev, pager, next"
-                        :total="50">
+                        :total="total">
                     </el-pagination>
                 </div>
             </div>
@@ -81,45 +90,104 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
-            classifyInfo: {},
-            classifyList: [
-                {
-                    classifyId: 1,
-                    classifyName: '阅读',
-                    classifyDescribe: '但似乎驱蚊器wneh',
-                    isValid: 1
-                },
-                {
-                    classifyId: 2,
-                    classifyName: '技术',
-                    classifyDescribe: '但似乎驱蚊器wneh',
-                    isValid: 1
-                },
-                {
-                    classifyId: 3,
-                    classifyName: '杂文',
-                    classifyDescribe: '但似乎驱蚊器wneh',
-                    isValid: 1
-                },
-                {
-                    classifyId: 4,
-                    classifyName: '生活',
-                    classifyDescribe: '但似乎驱蚊器asda玩额武器恶趣味131人情味wneh',
-                    isValid: 1
-                },
-                {
-                    classifyId: 5,
-                    classifyName: '娱乐',
-                    classifyDescribe: '但似乎驱蚊器wneh',
-                    isValid: 1
-                }
-            ]
+            classifyInfo: {
+                enabled: 1
+            },
+            classifyList: [],
+            total: 0,
+            rules: {
+                classifyName: [
+                    { required: true, message: '请输入分类名称', trigger: 'blur'}
+                ],
+                enabled: [
+                    { required: true, message: '请输入选择是否启用', trigger: 'blur'}
+                ]
+            }
         }
     },
+    mounted() {
+        this.toPage(1, 5)
+    },
     methods: {
+        toPage(pageNum, pageSize) {
+            let param = {
+                pageNum: pageNum,
+                pageSize: pageSize
+            }
+            this.loadData(param)
+        },
+        loadData(param) {
+            $get('/classify/findByPage', param).then(res=>{
+                if(res.code === 100) {
+                    this.classifyList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("查询失败!")
+            })
+        },
+        toEdit(classifyInfo) {
+            this.classifyInfo = classifyInfo
+        },
+        saveOrUpdate(formName) {
+            this.$refs[formName].validate((valid) => {
+                if(valid) {
+                    let url
+                    if(this.classifyInfo.classifyId) { //编辑
+                        url = '/classify/update'
+                    } else { // 新增
+                        url = '/classify/save'
+                    }
+                    $post(url, this.classifyInfo).then(res=>{
+                        if(res.code === 100) {
+                            this.$message.success(res.msg)
+                            this.resetForm(formName)
+                            this.toPage(1, 5)
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("保存失败!")
+                    })
+                } else {
+                    return false
+                }
+            });
+        },
+        updateEnable(classifyInfo) {
+            $post('/classify/update', classifyInfo).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                    this.toPage(1, 5)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("保存失败!")
+            })
+        },
+        deleteClassify(classifyInfo) {
+            let param = {
+                classifyId: classifyInfo.classifyId
+            }
+            $get('/classify/delete', param).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                    this.toPage(1, 5)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("查询失败!")
+            })
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         }
@@ -152,10 +220,9 @@ export default {
         .classify-info-pack {
             width: 60%;
             padding-left: 20px;
-            height: 48vh;
             .classify-info {
                 width: 100%;
-                height: 100%;
+                padding-bottom: 40px;
                 background-color: #ffffff;
                 box-shadow: 1px 1px 8px #c7c7c7;
                 border-radius: 4px;

@@ -173,17 +173,22 @@ export default {
         },
         changePass(formName) {
             this.$refs[formName].validate((valid) => {
-                $post("/user/changePass", this.passInfo).then(res=>{
-                    if(res.code === 100) {
-                        localStorage.removeItem("satoken");
-                        this.$message.success(res.msg)
-                        this.$router.push("/login")
-                    } else {
-                        this.$message.error(res.msg)
-                    }
-                }).catch(error => {
-                    this.$message.error("修改失败!")
-                })
+                if(valid) {
+                    $post("/user/changePass", this.passInfo).then(res=>{
+                        if(res.code === 100) {
+                            localStorage.removeItem("satoken");
+                            this.$message.success(res.msg)
+                            this.$router.push("/login")
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("修改失败!")
+                    })
+                } else {
+                    return false
+                }
+                
             });
         },
         cancelChange(formName) {

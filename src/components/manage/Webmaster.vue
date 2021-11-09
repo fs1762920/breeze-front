@@ -3,7 +3,16 @@
         <div class="main-left-pack">
             <div class="main-left">
                 <div class="webmaster-avatar">
-                    <el-avatar :size="100" :src="require('../../assets/avatar.jpg')"></el-avatar>
+                    <div class="webmaster-avatar-click">
+                        <el-upload
+                            class="avatar-uploader"
+                            :action="uploadUrl"
+                            :show-file-list="false"
+                            :on-success="uploadAvatarSuccess">
+                            <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </div>
                 </div>
                 <div class="webmaster-nickname">{{userInfo.nickname}}</div>
                 <div class="webmaster-contact">
@@ -107,7 +116,13 @@ export default {
             }
         };
         return {
-            userInfo: {},
+            uploadUrl: process.env.BASE_URL + '/file/upload',
+            header: {
+                satoken: 'Bearer ' + localStorage.getItem('satoken')
+            },
+            userInfo: {
+                avatar: require('../../assets/avatar.jpg')
+            },
             infoRules: {
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur'}
@@ -143,50 +158,81 @@ export default {
         }
     },
     mounted() {
-        $get("/user/userInfo", null).then(res=>{
-            if(res.code === 100) {
-                this.userInfo = {
-                    username: res.data.username,
-                    nickname: res.data.nickname,
-                    mail: res.data.mail,
-                    homePath: res.data.homePath,
-                    personalSign: res.data.personalSign
-                }
-            } else {
-                this.$message.error(res.msg)
-            }
-        }).catch(error => {
-            this.$message.error("获取个人信息失败!")
-        })
+        this.loadData()
     },
     methods: {
+        loadData() {
+            $get("/user/userInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.userInfo = {
+                        username: res.data.username,
+                        nickname: res.data.nickname,
+                        mail: res.data.mail,
+                        homePath: res.data.homePath,
+                        personalSign: res.data.personalSign,
+                        avatar: res.data.avatar
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("获取个人信息失败!")
+            })
+        },
         updateInfo(formName) {
             this.$refs[formName].validate((valid) => {
-                $post("/user/update", this.userInfo).then(res=>{
-                    if(res.code === 100) {
-                        this.$message.success(res.msg)
-                    } else {
-                        this.$message.error(res.msg)
-                    }
-                }).catch(error => {
-                    this.$message.error("保存失败!")
-                })
+                if(valid) {
+                    $post("/user/update", this.userInfo).then(res=>{
+                        if(res.code === 100) {
+                            this.$message.success(res.msg)
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("保存失败!")
+                    })
+                } else {
+                    return false
+                }
+                
             });
         },
         updatePass(formName) {
             this.$refs[formName].validate((valid) => {
-                $post("/user/changePass", this.passInfo).then(res=>{
-                    if(res.code === 100) {
-                        localStorage.removeItem("satoken");
-                        this.$message.success(res.msg)
-                        this.$router.push("/login")
-                    } else {
-                        this.$message.error(res.msg)
-                    }
-                }).catch(error => {
-                    this.$message.error("修改失败!")
-                })
+                if(valid) {
+                    $post("/user/changePass", this.passInfo).then(res=>{
+                        if(res.code === 100) {
+                            localStorage.removeItem("satoken");
+                            this.$message.success(res.msg)
+                            this.$router.push("/login")
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("修改失败!")
+                    })
+                } else {
+                    return false
+                }
+                
             });
+        },
+        uploadAvatarSuccess(res) {
+            console.log("avatar: ", res.data)
+            let param = {
+                avatar: res.data
+            }
+            $post("/user/update", param).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                    this.loadData()
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("保存失败!")
+            })
+
         }
     }
 }
@@ -205,10 +251,39 @@ export default {
                 .webmaster-avatar {
                     width: 100%;
                     padding-top: 20px;
-                    .el-avatar {
-                        display: block;
+                    /deep/.webmaster-avatar-click {
+                        width: 100px;
+                        height: 100px;
                         margin: 0 auto;
+                        .el-avatar {
+                            cursor: pointer;
+                            display: block;
+                        }
+                        .avatar-uploader .el-upload {
+                            border: 1px dashed #d8d8d8;
+                            border-radius: 50px;
+                            cursor: pointer;
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        .avatar-uploader .el-upload:hover {
+                            border-color: #409EFF;
+                        }
+                        .avatar-uploader-icon {
+                            font-size: 28px;
+                            color: #8c939d;
+                            width: 100px;
+                            height: 100px;
+                            line-height: 100px;
+                            text-align: center;
+                        }
+                        .avatar {
+                            width: 100px;
+                            height: 100px;
+                            display: block;
+                        }
                     }
+                    
                 }
                 .webmaster-nickname {
                     height: 40px;
@@ -250,5 +325,6 @@ export default {
                 }
             }
         }
+        
     }
 </style>

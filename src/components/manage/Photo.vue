@@ -1,5 +1,26 @@
 <template>
     <div class="photo-main">
+        <el-dialog
+            title="图片上传"
+            :visible.sync="showUpload"
+            width="30%"
+            :before-close="handleClose">
+            <el-upload
+                ref="upload"
+                list-type="picture"
+                accept=".jpg,.jpeg,.png,.bmp"
+                :action="uploadUrl"
+                :on-change="handleChange"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false"
+                multiple
+                :limit=5>
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="upload" :disabled="selectedFile.length==0">上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+        </el-dialog>
         <el-drawer
             class="photo-detail"
             title="图片详情"
@@ -21,7 +42,7 @@
             </div>
         </el-drawer>
         <div class="btn-group">
-            <el-button size="small" type="primary" icon="el-icon-upload2">上传</el-button>
+            <el-button size="small" type="primary" icon="el-icon-upload2" @click="showUpload = true">上传</el-button>
             <el-button size="small" v-if="batchOperated" :disabled="photoIds.length === 0" type="danger" icon="el-icon-delete" @click="deleteBatch()">删除</el-button>
             <el-button size="small" v-if="batchOperated" icon="el-icon-upload2" @click="cancel">取消</el-button>
             <el-button size="small" v-else icon="el-icon-edit-outline" @click="batchOperated = !batchOperated">批量操作</el-button>
@@ -102,7 +123,10 @@ export default {
         return {
             photoIds: [],
             batchOperated: false,
-            photoDetailShow: false
+            photoDetailShow: false,
+            selectedFile: [],
+            fileList: [],
+            showUpload: false
         }
     },
     methods: {
@@ -117,7 +141,44 @@ export default {
         cancel() {
             this.batchOperated = false
             this.photoIds = []
-        }
+        },
+        handleClose(){
+            this.selectedFile = []
+            this.showUpload = false
+        },
+        handleChange(file, fileList) {
+            this.selectedFile.push(file.raw)
+        },
+        handleRemove(file) {
+            console.log("删除前文件数量:"+this.selectedFile.length)
+            this.selectedFile.splice(this.fileList.indexOf(file), 1)
+            console.log("删除后文件数量:"+this.selectedFile.length)
+        },
+        upload() {
+            let param = new FormData()
+            this.selectedFile.forEach(item => {
+                param.append("files", item)
+            })
+            this.showUpload = false
+            this.$message.success("上传成功!")
+            this.fileList = []
+            this.selectedFile = []
+            // $post("/picture/add", param).then(res=>{
+            //     console.log("请求结果: ", res)
+            //     if(res.code === 100) {
+            //         this.showUpload = false
+            //         this.$message(res.msg)
+            //         this.fileList = []
+            //         this.selectedFile = []
+            //         this.toPage(1)
+            //     } else {
+            //         this.$message(res.msg)
+            //     }
+            // }).catch(error => {
+            //     this.$message("无法连接到服务器")
+            // });
+            
+        },
     }
 }
 </script>

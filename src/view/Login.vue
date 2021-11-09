@@ -4,15 +4,15 @@
             <div class="header">Breeze Dashboard</div>
             <el-divider></el-divider>
             <div class="login-form">
-                <el-form :ref="loginForm" :rules="rules" :model="loginInfo">
+                <el-form ref="loginForm" :rules="rules" :model="loginInfo">
                     <el-form-item prop="username">
-                        <el-input v-model="loginInfo.username" prefix-icon="el-icon-user" placeholder="用户名"></el-input>
+                        <el-input v-model="loginInfo.username" prefix-icon="el-icon-user" placeholder="用户名" @keyup.enter.native="login('loginForm')"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="密码"></el-input>
+                        <el-input type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="密码" @keyup.enter.native="login('loginForm')"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" style="width: 100%" round>登录</el-button>
+                        <el-button type="primary" style="width: 100%" round @click="login('loginForm')">登录</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -20,6 +20,8 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../api/RestUtils'
+
 export default {
     data() {
         return {
@@ -32,6 +34,26 @@ export default {
                     { required: true, message: "请输入密码", trigger: 'blur'}
                 ]
             }
+        }
+    },
+    methods: {
+        login(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    $post("/user/login", this.loginInfo).then(res=>{
+                        if(res.code === 100) {
+                            localStorage.setItem("satoken", res.data.token);
+                            this.$router.push("/manage/statistics")
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("登录失败!")
+                    })
+                } else {
+                    return false;
+                }
+            });
         }
     }
 }

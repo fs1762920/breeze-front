@@ -113,24 +113,11 @@
 
 </template>
 <script>
+import {$get, $post} from '../api/RestUtils'
 
 export default {
     data(){
-        var validateOldPass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入旧密码'));
-            } else {
-                callback();
-            }
-        };
-        var validateNewPass = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入新密码'));
-            } else {
-                callback();
-            }
-        };
-        var validateCheckPass = (rule, value, callback) => {
+        var checkPass = (rule, value, callback) => {
             if (value === '') {
                 callback(new Error('请再次输入密码'));
             } else if (value !== this.passInfo.newPass) {
@@ -144,19 +131,17 @@ export default {
             show: false,
             rules: {
                 oldPass: [
-                    {required: true, message: "请输入旧密码", trigger: "blur"},
-                    { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' },
-                    { validator: validateOldPass, trigger: 'blur' }
+                    { required: true, message: "请输入旧密码", trigger: "blur"},
+                    { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' }
                 ],
                 newPass: [
-                    {required: true, message: "请输入新密码", trigger: "blur"},
-                    { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' },
-                    { validator: validateNewPass, trigger: 'blur' }
+                    { required: true, message: "请输入新密码", trigger: "blur"},
+                    { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' }
                 ],
                 checkPass: [
-                    {required: true, message: "请输入确认密码", trigger: "blur"},
+                    { required: true, message: "请输入确认密码", trigger: "blur"},
                     { min: 8, max: 16, message: '长度在 8 到 16 个字符', trigger: 'blur' },
-                    { validator: validateCheckPass, trigger: 'blur' }
+                    { validator: checkPass, trigger: 'blur' }
                 ]
             }
             
@@ -171,13 +156,35 @@ export default {
         },
         handleCommand(command) {
             if (command === "logout") { //注销
-                
+                $get("/user/logout", null).then(res=>{
+                    if(res.code === 100) {
+                        localStorage.removeItem("satoken");
+                        this.$message.success(res.msg)
+                        this.$router.push("/login")
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                }).catch(error => {
+                    this.$message.error("注销失败!")
+                })
             } else if (command === 'changePass') { //修改密码
                 this.show = true
             }
         },
         changePass(formName) {
-            
+            this.$refs[formName].validate((valid) => {
+                $post("/user/changePass", this.passInfo).then(res=>{
+                    if(res.code === 100) {
+                        localStorage.removeItem("satoken");
+                        this.$message.success(res.msg)
+                        this.$router.push("/login")
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                }).catch(error => {
+                    this.$message.error("修改失败!")
+                })
+            });
         },
         cancelChange(formName) {
             this.show = false

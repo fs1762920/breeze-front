@@ -27,67 +27,67 @@
                 Breeze DashBoard
             </div>
             <el-menu
-                default-active="1"
+                :default-active="this.$route.path"
                 background-color="#2f3449"
                 active-text-color="#fff"
                 text-color="#fff">
-                <el-menu-item index="1" @click="toDispatch('/manage/statistics')">
+                <el-menu-item index="/manage/statistics" @click="toDispatch('/manage/statistics')">
                     <i class="iconfont icon-gongyezujian-yibiaopan"></i>
                     <span slot="title">&nbsp;仪表盘</span>
                 </el-menu-item>
-                <el-submenu index="2">
+                <el-submenu index="/essay">
                     <template slot="title">
                         <i class="iconfont icon-bianjiwenzhang_huaban"></i>
                         <span>&nbsp;文章</span>
                     </template>
-                    <el-menu-item index="2-1" @click="toDispatch('/manage/essay')">
+                    <el-menu-item index="/manage/essay" @click="toDispatch('/manage/essay')">
                         <span slot="title">&nbsp;所有文章</span>
                     </el-menu-item>
-                    <el-menu-item index="2-2" @click="toDispatch('/manage/compose')">
+                    <el-menu-item index="/manage/compose" @click="toDispatch('/manage/compose')">
                         <span slot="title">&nbsp;撰写文章</span>
                     </el-menu-item>
-                    <el-menu-item index="2-3" @click="toDispatch('/manage/classify')">
+                    <el-menu-item index="/manage/classify" @click="toDispatch('/manage/classify')">
                         <span slot="title">&nbsp;分类管理</span>
                     </el-menu-item>
-                    <el-menu-item index="2-4" @click="toDispatch('/manage/label')">
+                    <el-menu-item index="/manage/label" @click="toDispatch('/manage/label')">
                         <span slot="title">&nbsp;标签管理</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-submenu index="3">
+                <el-submenu index="/page">
                     <template slot="title">
                         <i class="iconfont icon-yemian"></i>
                         <span>&nbsp;页面</span>
                     </template>
-                    <el-menu-item index="3-1" @click="toDispatch('/manage/page')">
+                    <el-menu-item index="/manage/page" @click="toDispatch('/manage/page')">
                         <span slot="title">&nbsp;关于我</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-menu-item index="4" @click="toDispatch('/manage/photo')">
+                <el-menu-item index="/manage/photo" @click="toDispatch('/manage/photo')">
                     <i class="iconfont icon-icon"></i>
                     <span slot="title">&nbsp;相册</span>
                 </el-menu-item>
-                <el-menu-item index="5" @click="toDispatch('/manage/comment')">
+                <el-menu-item index="/manage/comment" @click="toDispatch('/manage/comment')">
                     <i class="iconfont icon-pinglun"></i>
                     <span slot="title">&nbsp;评论</span>
                 </el-menu-item>
-                <el-submenu index="6">
+                <el-submenu index="/webmaster">
                     <template slot="title">
                         <i class="iconfont icon-yonghu"></i>
                         <span>&nbsp;用户</span>
                     </template>
-                    <el-menu-item index="6-1" @click="toDispatch('/manage/webmaster')">
+                    <el-menu-item index="/manage/webmaster" @click="toDispatch('/manage/webmaster')">
                         <span slot="title">&nbsp;个人资料</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-submenu index="7">
+                <el-submenu index="/system">
                     <template slot="title">
                         <i class="iconfont icon-icon_shezhi"></i>
                         <span>&nbsp;系统</span>
                     </template>
-                    <el-menu-item index="7-1" @click="toDispatch('/manage/tool')">
+                    <el-menu-item index="/manage/tool" @click="toDispatch('/manage/tool')">
                         <span slot="title">&nbsp;工具</span>
                     </el-menu-item>
-                    <el-menu-item index="7-2" @click="toDispatch('/manage/website')">
+                    <el-menu-item index="/manage/website" @click="toDispatch('/manage/website')">
                         <span slot="title">&nbsp;关于本站</span>
                     </el-menu-item>
                 </el-submenu>
@@ -110,7 +110,6 @@
             </el-main>
         </el-container>
     </el-container>
-
 </template>
 <script>
 import {$get, $post} from '../api/RestUtils'
@@ -127,6 +126,7 @@ export default {
             }
         };
         return {
+            activeIndex: '/manage/statistics',
             passInfo: {},
             show: false,
             rules: {

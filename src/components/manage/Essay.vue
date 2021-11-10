@@ -95,7 +95,7 @@
                             <el-button
                                 size="mini"
                                 type="text"
-                                @click="showEditDialog(scope.row)">编辑</el-button>
+                                @click="toEdit(scope.row)">编辑</el-button>
                             <el-button
                                 size="mini"
                                 type="text"
@@ -142,6 +142,11 @@ export default {
                     
                 }
             ]
+        }
+    },
+    methods: {
+        toEdit(blogInfo) {
+            this.$router.push('/manage/compose')
         }
     }
 }

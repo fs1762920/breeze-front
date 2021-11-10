@@ -97,7 +97,7 @@
             <el-header>
                 <el-dropdown class="user-tab" trigger="click" @command="handleCommand">
                     <div class="user">
-                        <el-avatar :src="require('../assets/avatar.jpg')"></el-avatar>
+                        <el-avatar :src="sourceUrlPrefix + userInfo.avatar"></el-avatar>
                     </div>
                     <el-dropdown-menu :split-button="true" slot="dropdown">
                         <el-dropdown-item command='changePass'>修改密码</el-dropdown-item>
@@ -126,6 +126,8 @@ export default {
             }
         };
         return {
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
+            userInfo: {},
             activeIndex: '/manage/statistics',
             passInfo: {},
             show: false,
@@ -148,9 +150,21 @@ export default {
         }
     },
     mounted() {
+        this.loadUserInfo()
         this.toDispatch('/manage/statistics')
     },
     methods: {
+        loadUserInfo() {
+            $get("/user/userInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.userInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         toDispatch(url){
             this.$router.push(url);
         },
@@ -165,7 +179,7 @@ export default {
                         this.$message.error(res.msg)
                     }
                 }).catch(error => {
-                    this.$message.error("注销失败!")
+                    this.$message.error("无法连接到服务器!")
                 })
             } else if (command === 'changePass') { //修改密码
                 this.show = true
@@ -183,7 +197,7 @@ export default {
                             this.$message.error(res.msg)
                         }
                     }).catch(error => {
-                        this.$message.error("修改失败!")
+                        this.$message.error("无法连接到服务器!")
                     })
                 } else {
                     return false

@@ -48,6 +48,7 @@
                     <el-upload
                         class="avatar-uploader"
                         :action="uploadUrl"
+                        :headers="header"
                         :show-file-list="false"
                         :on-success="uploadCoverSuccess">
                         <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar">
@@ -56,7 +57,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" style="float: right; margin-left: 10px" @click="publish">发 布</el-button>
-                    <el-button type="danger" style="float: right" @click="save">保存草稿</el-button>
+                    <el-button type="danger" style="float: right" :disabled="this.$route.params && this.$route.params.blogId" @click="save">保存草稿</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
@@ -67,7 +68,7 @@
         <mavon-editor  
             :toolbars="toolbars"
             style="height: calc(100vh - 150px);"
-            v-model="blogInfo.content"
+            v-model="blogInfo.markdownContent"
             @change="change"
             @imgAdd="handleEditorImgAdd"
             ref='md'>
@@ -82,6 +83,9 @@ export default {
         return {
             uploadUrl: process.env.BASE_URL + '/file/upload',
             sourceUrlPrefix: process.env.SOURCE_BASE_URL,
+            header: {
+                satoken: "Bearer " + localStorage.getItem('satoken')
+            },
             toolbars: {
                 bold: true, // 粗体
                 italic: true, // 斜体
@@ -129,10 +133,27 @@ export default {
     },
     mounted() {
         console.log("param: ", JSON.stringify(this.$route.params))
+        if(this.$route.params && this.$route.params.blogId) {
+            this.loadBlogInfo(this.$route.params.blogId)
+        }
         this.loadClassifyList()
         this.loadLabelList()
     },
     methods: {
+        loadBlogInfo(blogId) {
+            let param = {
+                blogId: blogId
+            }
+            $get('/blog/findOne', param).then(res=>{
+                if(res.code === 100) {
+                    this.blogInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
+        },
         loadClassifyList() {
             $get('/classify/find', null).then(res=>{
                 if(res.code === 100) {
@@ -185,6 +206,7 @@ export default {
             $post('/blog/save', this.blogInfo).then(res=>{
                 if(res.code === 100) {
                     this.$message.success("暂存成功")
+                    this.essaySettingShow = false
                 } else {
                     this.$message.error("暂存失败")
                 }
@@ -197,6 +219,7 @@ export default {
             $post('/blog/save', this.blogInfo).then(res=>{
                 if(res.code === 100) {
                     this.$message.success("发布成功")
+                    this.essaySettingShow = false
                 } else {
                     this.$message.error("发布失败")
                 }

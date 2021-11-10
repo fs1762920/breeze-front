@@ -7,6 +7,7 @@
                         <el-upload
                             class="avatar-uploader"
                             :action="uploadUrl"
+                            :headers="header"
                             :show-file-list="false"
                             :on-success="uploadAvatarSuccess">
                             <img v-if="userInfo.avatar" :src="sourceUrlPrefix + userInfo.avatar" class="avatar">

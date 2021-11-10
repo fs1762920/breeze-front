@@ -9,14 +9,14 @@
                 <el-form-item label="文章标题" prop="title">
                     <el-input v-model="blogInfo.title"></el-input>
                 </el-form-item>
-                <el-form-item label="开启评论" prop="commentEnabled">
-                    <el-radio-group v-model="blogInfo.commentEnabled">
+                <el-form-item label="开启评论" prop="commented">
+                    <el-radio-group v-model="blogInfo.commented">
                         <el-radio :label="1">开启</el-radio>
                         <el-radio :label="0">关闭</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="是否置顶" prop="isTop">
-                    <el-radio-group v-model="blogInfo.isTop">
+                <el-form-item label="是否置顶" prop="topped">
+                    <el-radio-group v-model="blogInfo.topped">
                         <el-radio :label="1">是</el-radio>
                         <el-radio :label="0">否</el-radio>
                     </el-radio-group>
@@ -47,24 +47,22 @@
                 <el-form-item label="封面">
                     <el-upload
                         class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :action="uploadUrl"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                        <img v-if="blogInfo.cover" :src="blogInfo.cover" class="avatar">
+                        :on-success="uploadCoverSuccess">
+                        <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" style="float: right; margin-left: 10px">发布</el-button>
-                    <el-button type="danger" style="float: right">保存草稿</el-button>
+                    <el-button type="primary" style="float: right; margin-left: 10px" @click="publish">发 布</el-button>
+                    <el-button type="danger" style="float: right" @click="save">保存草稿</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>
         <div class="head">
             <el-input v-model="blogInfo.title" style="width: 100%" placeholder="文章标题"></el-input>
-            <el-button type="danger">保存草稿</el-button>
-            <el-button type="primary" @click="showEssaySetting()">发布</el-button>
+            <el-button type="primary" @click="showEssaySetting()">发布文章</el-button>
         </div>
         <mavon-editor  
             :toolbars="toolbars"
@@ -77,9 +75,13 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
+            uploadUrl: process.env.BASE_URL + '/file/upload',
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             toolbars: {
                 bold: true, // 粗体
                 italic: true, // 斜体
@@ -117,89 +119,90 @@ export default {
             },
             blogInfo: {
                 labelIds: [],
-                commentEnabled: 1,
-                isTop: 0,
-                cover: require('../../assets/wallhaven-3z9lp6.jpg')
+                commented: 1,
+                topped: 0
             },
             essaySettingShow: false,
-            labelList: [
-                {
-                    labelId: 1,
-                    labelName: 'Java'
-                },
-                {
-                    labelId: 2,
-                    labelName: 'Spring Boot'
-                },
-                {
-                    labelId: 3,
-                    labelName: 'Kafka'
-                },
-                {
-                    labelId: 4,
-                    labelName: 'Vue'
-                },
-                {
-                    labelId: 5,
-                    labelName: 'React'
-                },
-                {
-                    labelId: 6,
-                    labelName: 'Node.js'
-                },
-                {
-                    labelId: 7,
-                    labelName: 'Linux'
-                },
-                {
-                    labelId: 8,
-                    labelName: '大数据'
-                },
-            ],
-            classifyList: [
-                {
-                    classifyId: 1,
-                    classifyName: '技术'
-                },
-                {
-                    classifyId: 2,
-                    classifyName: '阅读'
-                },
-                {
-                    classifyId: 3,
-                    classifyName: '杂文'
-                },
-                {
-                    classifyId: 4,
-                    classifyName: '生活'
-                }
-            ]
+            labelList: [],
+            classifyList: []
         }
     },
+    mounted() {
+        this.loadClassifyList()
+        this.loadLabelList()
+    },
     methods: {
+        loadClassifyList() {
+            $get('/classify/find', null).then(res=>{
+                if(res.code === 100) {
+                    this.classifyList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
+        },
+        loadLabelList() {
+            $get('/label/find', null).then(res=>{
+                if(res.code === 100) {
+                    this.labelList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
+        },
         showEssaySetting() {
             this.essaySettingShow = true
         },
         change(value, render) {
-            this.blogInfo.content = value
+            this.blogInfo.markdownContent = value
             this.blogInfo.htmlContent = render
-            console.log(render)
         },
         //上传图片接口pos 表示第几个图片 
         handleEditorImgAdd(pos , $file){
-            // let formdata = new FormData();
-            // formdata.append('files' , $file);
-            // $post('/file/uploadImg', formdata).then(res=>{
-            //     if(res.code === 100) {
-            //         let url = res.data[0].filePath;
-            //         this.$refs.md.$img2Url(pos, url);
-            //     } else {
-            //         this.$message("上传失败,"+res.msg)
-            //     }
-            // }).catch(error => {
-            //     this.$message("无法连接到服务器")
-            // })
+            let formdata = new FormData();
+            formdata.append('file' , $file);
+            $post('/file/upload', formdata).then(res=>{
+                if(res.code === 100) {
+                    let url = this.sourceUrlPrefix + res.data;
+                    this.$refs.md.$img2Url(pos, url);
+                } else {
+                    this.$message.error("上传失败,"+res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
         },
+        uploadCoverSuccess(res) {
+            this.blogInfo.cover = res.data
+        },
+        save() {
+            this.blogInfo.status = 0
+            $post('/blog/save', this.blogInfo).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success("暂存成功")
+                } else {
+                    this.$message.error("暂存失败")
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
+        },
+        publish() {
+            this.blogInfo.status = 1
+            $post('/blog/save', this.blogInfo).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success("发布成功")
+                } else {
+                    this.$message.error("发布失败")
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
+        }
     }
 }
 </script>

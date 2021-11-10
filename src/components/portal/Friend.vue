@@ -12,7 +12,10 @@
                 <el-form-item label="邮箱" prop="mail">
                     <el-input v-model="friendInfo.mail"></el-input>
                 </el-form-item>
-                <el-form-item label="头像" prop="avatar">
+                <el-form-item label="头像链接" prop="avatar">
+                    <el-input v-model="friendInfo.avatar"></el-input>
+                </el-form-item>
+                <!-- <el-form-item label="头像" prop="avatar">
                     <el-upload
                         class="avatar-uploader"
                         action="https://jsonplaceholder.typicode.com/posts/"
@@ -20,7 +23,7 @@
                         <img v-if="friendInfo.avatar" :src="friendInfo.avatar" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="博客主页" prop="homePage">
                     <el-input v-model="friendInfo.homePage"></el-input>
                 </el-form-item>

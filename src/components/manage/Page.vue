@@ -1,7 +1,7 @@
 <template>
     <div class="page-main">
         <div class="head">
-            <el-button type="primary">发布页面</el-button>
+            <el-button type="primary" @click="publish">发布页面</el-button>
         </div>
         <mavon-editor  
             :toolbars="toolbars"
@@ -14,9 +14,12 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             toolbars: {
                 bold: true, // 粗体
                 italic: true, // 斜体
@@ -52,28 +55,69 @@ export default {
                 subfield: true, // 单双栏模式
                 preview: true, // 预览
             },
-            aboutInfo: {}
+            aboutInfo: {
+                content: '',
+                htmlContent: ''
+            }
         }
     },
+    mounted() {
+        let param = {
+            pageCode: 'about'
+        }
+        this.loadData(param)
+    },
     methods: {
+        loadData(param){
+            $get('/page/find', param).then(res=>{
+                if(res.code === 100) {
+                    if (res.data) {
+                        this.aboutInfo.content = res.data.markdownContent
+                        this.aboutInfo.htmlContent = res.data.htmlContent
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message("无法连接到服务器")
+            })
+        },
         change(value, render) {
-            this.blogInfo.content = value
-            this.blogInfo.htmlContent = render
+            this.aboutInfo.content = value
+            this.aboutInfo.htmlContent = render
+        },
+        publish() {
+            let param = {
+                pageCode: 'about',
+                markdownContent: this.aboutInfo.content,
+                htmlContent: this.aboutInfo.htmlContent
+            }
+            $post('/page/save', param).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message("无法连接到服务器")
+            })
         },
         //上传图片接口pos 表示第几个图片 
         handleEditorImgAdd(pos , $file){
-            // let formdata = new FormData();
-            // formdata.append('files' , $file);
-            // $post('/file/uploadImg', formdata).then(res=>{
-            //     if(res.code === 100) {
-            //         let url = res.data[0].filePath;
-            //         this.$refs.md.$img2Url(pos, url);
-            //     } else {
-            //         this.$message("上传失败,"+res.msg)
-            //     }
-            // }).catch(error => {
-            //     this.$message("无法连接到服务器")
-            // })
+            console.log("pos:", pos)
+            let formdata = new FormData();
+            formdata.append('file' , $file);
+            $post('/file/upload', formdata).then(res=>{
+                if(res.code === 100) {
+                    let url = this.sourceUrlPrefix + res.data;
+                    console.log("url:", url)
+                    this.$refs.md.$img2Url(pos, url);
+                } else {
+                    this.$message.error("上传失败,"+res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            })
         },
     }
 }

@@ -82,7 +82,11 @@
                 <div class="page">
                     <el-pagination
                         layout="prev, pager, next"
-                        :total="total">
+                        @current-change="toPage"
+                        @prev-click="toPage"
+                        @next-click="toPage"
+                        :total="total"
+                        :page-size="pageSize">
                     </el-pagination>
                 </div>
             </div>
@@ -100,6 +104,7 @@ export default {
             },
             classifyList: [],
             total: 0,
+            pageSize: 5,
             rules: {
                 classifyName: [
                     { required: true, message: '请输入分类名称', trigger: 'blur'}
@@ -111,13 +116,13 @@ export default {
         }
     },
     mounted() {
-        this.toPage(1, 5)
+        this.toPage(1)
     },
     methods: {
-        toPage(pageNum, pageSize) {
+        toPage(pageNum) {
             let param = {
                 pageNum: pageNum,
-                pageSize: pageSize
+                pageSize: this.pageSize
             }
             this.loadData(param)
         },
@@ -149,7 +154,7 @@ export default {
                         if(res.code === 100) {
                             this.$message.success(res.msg)
                             this.resetForm(formName)
-                            this.toPage(1, 5)
+                            this.toPage(1)
                         } else {
                             this.$message.error(res.msg)
                         }
@@ -165,7 +170,7 @@ export default {
             $post('/classify/update', classifyInfo).then(res=>{
                 if(res.code === 100) {
                     this.$message.success(res.msg)
-                    this.toPage(1, 5)
+                    this.toPage(1)
                 } else {
                     this.$message.error(res.msg)
                 }
@@ -180,7 +185,7 @@ export default {
             $get('/classify/delete', param).then(res=>{
                 if(res.code === 100) {
                     this.$message.success(res.msg)
-                    this.toPage(1, 5)
+                    this.toPage(1)
                 } else {
                     this.$message.error(res.msg)
                 }

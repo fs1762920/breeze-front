@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '../router/index'
+import qs from 'qs'
 
 var baseUrl = process.env.BASE_URL
 
@@ -12,6 +13,12 @@ axios.interceptors.request.use(
     if (localStorage.getItem('satoken')) {
       config.headers.satoken = "Bearer " + localStorage.getItem('satoken');
       // console.log("header:"+config.headers.satoken)
+    }
+    if (config.method === 'get') {
+      // 如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
+      config.paramsSerializer = function(params) {
+        return qs.stringify(params, { arrayFormat: 'repeat' })
+      }
     }
     return config;
   },

@@ -9,7 +9,7 @@
                             :action="uploadUrl"
                             :show-file-list="false"
                             :on-success="uploadAvatarSuccess">
-                            <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar">
+                            <img v-if="userInfo.avatar" :src="sourceUrlPrefix + userInfo.avatar" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </div>
@@ -117,12 +117,11 @@ export default {
         };
         return {
             uploadUrl: process.env.BASE_URL + '/file/upload',
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             header: {
                 satoken: 'Bearer ' + localStorage.getItem('satoken')
             },
-            userInfo: {
-                avatar: require('../../assets/avatar.jpg')
-            },
+            userInfo: {},
             infoRules: {
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur'}

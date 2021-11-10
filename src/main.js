@@ -15,7 +15,6 @@ import moment from 'moment'
 import './assets/iconfont/iconfont.css'
 
 
-
 Vue.config.productionTip = false;
 Vue.use(Vuex);
 Vue.use(ElementUI);

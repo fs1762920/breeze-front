@@ -28,16 +28,16 @@
             direction="rtl">
             <div class="photo-overview">
                 <div class="photo-cover">
-                    <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
+                    <el-image fit="cover" :src="sourceUrlPrefix + currentPhotoInfo.photoPath"></el-image>
                 </div>
                 <el-divider></el-divider>
                 <div class="photo-info">
-                    <div class="photo-info-item">图片名称:&nbsp;&nbsp;4d3ea53c084bad6931a56d5158a48</div>
-                    <div class="photo-info-item">图片类型:&nbsp;&nbsp;image/png</div>
-                    <div class="photo-info-item">图片大小:&nbsp;&nbsp;61.00 KB</div>
-                    <div class="photo-info-item">图片尺寸:&nbsp;&nbsp;2362x2362</div>
-                    <div class="photo-info-item">上传日期:&nbsp;&nbsp;2021-02-21</div>
-                    <div class="photo-info-item">图片链接:&nbsp;&nbsp;<a href="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg</a></div>
+                    <div class="photo-info-item">图片名称:&nbsp;&nbsp;{{currentPhotoInfo.displayName}}</div>
+                    <div class="photo-info-item">图片类型:&nbsp;&nbsp;{{currentPhotoInfo.mimeType}}</div>
+                    <div class="photo-info-item">图片大小:&nbsp;&nbsp;{{change(currentPhotoInfo.size)}}</div>
+                    <div class="photo-info-item">图片尺寸:&nbsp;&nbsp;{{currentPhotoInfo.width + '×' + currentPhotoInfo.height}}</div>
+                    <div class="photo-info-item">上传日期:&nbsp;&nbsp;{{dateFormat(currentPhotoInfo.ctime)}}</div>
+                    <div class="photo-info-item">图片链接:&nbsp;&nbsp;<a :href="sourceUrlPrefix + currentPhotoInfo.photoPath" target="_blank">{{currentPhotoInfo.photoPath}}</a></div>
                 </div>
             </div>
         </el-drawer>
@@ -49,78 +49,40 @@
         </div>
         <div class="photo-list">
             <el-checkbox-group v-model="photoIds">
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="1"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
+                <div class="photo-item" v-for="(item, index) in photoList" :key="index">
+                    <el-checkbox v-if="batchOperated" :label="item.photoId"></el-checkbox>
+                    <div class="photo-item-body" @click="showDetail(item)">
+                        <el-image fit="cover" :src="sourceUrlPrefix + item.photoPath"></el-image>
                     </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="2"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="3"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" :src="require('../../assets/wallhaven-3z9lp6.jpg')"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="4"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="5"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="6"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="7"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
-                </div>
-                <div class="photo-item">
-                    <el-checkbox v-if="batchOperated" :label="8"></el-checkbox>
-                    <div class="photo-item-body" @click="showDetail">
-                        <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
-                    </div>
-                    <div class="photo-item-title">《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</div>
+                    <div class="photo-item-title">{{item.displayName}}</div>
                 </div>
             </el-checkbox-group>
-            
         </div>
         <div class="photo-page">
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :total="50">
+                @current-change="toPage"
+                @prev-click="toPage"
+                @next-click="toPage"
+                :total="total"
+                :page-size="pageSize">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
+            uploadUrl: process.env.BASE_URL + '/file/upload',
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
+            photoList: [],
+            total: 0,
+            pageSize: 8,
+            currentPhotoInfo: {},
             photoIds: [],
             batchOperated: false,
             photoDetailShow: false,
@@ -129,13 +91,49 @@ export default {
             showUpload: false
         }
     },
+    mounted() {
+        this.toPage(1)
+    },
     methods: {
+        loadData(param) {
+            $get("/photo/findByPage", param).then(res=>{
+                console.log("请求结果: ", res)
+                if(res.code === 100) {
+                    this.photoList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            });
+        },
+        toPage(pageNum) {
+            let param = {
+                pageNum: pageNum,
+                pageSize: this.pageSize
+            }
+            this.loadData(param)
+        },
         deleteBatch() {
             console.log(JSON.stringify(this.photoIds))
-            this.batchOperated = false
-            this.photoIds = []
+            let param = {
+                photoIds: this.photoIds
+            }
+            $get("/photo/deleteBatch", param).then(res=>{
+                if(res.code === 100) {
+                    this.batchOperated = false
+                    this.photoIds = []
+                    this.toPage(1)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            });
         },
-        showDetail() {
+        showDetail(photoInfo) {
+            this.currentPhotoInfo = photoInfo
             this.photoDetailShow = true
         },
         cancel() {
@@ -160,25 +158,45 @@ export default {
                 param.append("files", item)
             })
             this.showUpload = false
-            this.$message.success("上传成功!")
             this.fileList = []
             this.selectedFile = []
-            // $post("/picture/add", param).then(res=>{
-            //     console.log("请求结果: ", res)
-            //     if(res.code === 100) {
-            //         this.showUpload = false
-            //         this.$message(res.msg)
-            //         this.fileList = []
-            //         this.selectedFile = []
-            //         this.toPage(1)
-            //     } else {
-            //         this.$message(res.msg)
-            //     }
-            // }).catch(error => {
-            //     this.$message("无法连接到服务器")
-            // });
-            
+            $post("/photo/upload", param).then(res=>{
+                if(res.code === 100) {
+                    this.showUpload = false
+                    this.$message.success(res.msg)
+                    this.fileList = []
+                    this.selectedFile = []
+                    this.toPage(1)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            });
         },
+        dateFormat(date){
+            return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")
+        },
+        change(limit){
+            let size = "";
+            if(limit < 0.1 * 1024){                            //小于0.1KB，则转化成B
+                size = limit.toFixed(2) + "B"
+            }else if(limit < 0.1 * 1024 * 1024){            //小于0.1MB，则转化成KB
+                size = (limit/1024).toFixed(2) + "KB"
+            }else if(limit < 0.1 * 1024 * 1024 * 1024){        //小于0.1GB，则转化成MB
+                size = (limit/(1024 * 1024)).toFixed(2) + "MB"
+            }else{                                            //其他转化成GB
+                size = (limit/(1024 * 1024 * 1024)).toFixed(2) + "GB"
+            }
+
+            var sizeStr = size + "";                        //转成字符串
+            var index = sizeStr.indexOf(".");                    //获取小数点处的索引
+            var dou = sizeStr.substr(index + 1, 2)            //获取小数点后两位的值
+            if(dou == "00"){                                //判断后两位是否为00，如果是则删除00                
+                return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+            }
+            return size;
+        }
     }
 }
 </script>
@@ -219,7 +237,7 @@ export default {
             background-color: #ffffff;
         }
         .photo-list {
-            min-height: 64vh;
+            height: 30vw;
             .photo-item {
                 width: 24%;
                 float: left;
@@ -256,6 +274,7 @@ export default {
             }
         }
         .photo-page {
+            margin-top: 20px;
             float: right;
         }
     }

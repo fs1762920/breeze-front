@@ -70,7 +70,6 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     $post("/system/initWebmasterInfo", this.userInfo).then(res=>{
-                        console.log("注销结果: ", res)
                         if(res.code === 100) {
                             this.$router.push("/login")
                             this.$message.success(res.msg)

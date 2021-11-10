@@ -128,6 +128,7 @@ export default {
         }
     },
     mounted() {
+        console.log("param: ", JSON.stringify(this.$route.params))
         this.loadClassifyList()
         this.loadLabelList()
     },

@@ -139,14 +139,15 @@ export default {
             ],
             blogList: [
                 {
-                    
+                    blogId: 1,
+                    title: '《资本论》'
                 }
             ]
         }
     },
     methods: {
         toEdit(blogInfo) {
-            this.$router.push('/manage/compose')
+            this.$router.push({ name: 'compose', params: { blogId: blogInfo.blogId }});
         }
     }
 }

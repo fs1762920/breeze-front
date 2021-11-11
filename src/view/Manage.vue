@@ -158,15 +158,7 @@ export default {
         loadWebmasterInfo() {
             $get("/system/webmasterInfo", null).then(res=>{
                 if(res.code === 100) {
-                    // this.userInfo = res.data
-                    this.userInfo = {
-                        username: res.data.username,
-                        nickname: res.data.nickname,
-                        mail: res.data.mail,
-                        homePath: res.data.homePath,
-                        personalSign: res.data.personalSign,
-                        avatar: res.data.avatar
-                    }
+                    this.userInfo = res.data
                 } else {
                     this.$message.error(res.msg)
                 }

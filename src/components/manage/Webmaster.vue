@@ -24,28 +24,28 @@
                         <i class="el-icon-message"></i>&nbsp;&nbsp;{{userInfo.mail}}
                     </div>
                     <div class="webmaster-contact-item">
-                        <i class="el-icon-date"></i>&nbsp;&nbsp;870天
+                        <i class="el-icon-date"></i>&nbsp;&nbsp;{{websiteInfo.buildDuration}}天
                     </div>
                 </div>
                 <el-divider></el-divider>
                 <div class="operate-record">
                     <div class="operate-record-item">
-                        累计发表了&nbsp;2&nbsp;篇文章。
+                        累计发表了&nbsp;{{websiteInfo.blogCount}}&nbsp;篇文章。
                     </div>
                     <div class="operate-record-item">
-                        累计创建了&nbsp;4&nbsp;个分类。
+                        累计创建了&nbsp;{{websiteInfo.classifyCount}}&nbsp;个分类。
                     </div>
                     <div class="operate-record-item">
-                        累计创建了&nbsp;10&nbsp;个标签。
+                        累计创建了&nbsp;{{websiteInfo.labelCount}}&nbsp;个标签。
                     </div>
                     <div class="operate-record-item">
-                        累计获得了&nbsp;12&nbsp;条评论。
+                        累计获得了&nbsp;{{websiteInfo.commentCount}}&nbsp;条评论。
                     </div>
                     <div class="operate-record-item">
-                        累计添加了&nbsp;0&nbsp;个友链。
+                        累计添加了&nbsp;{{websiteInfo.friendCount}}&nbsp;个友链。
                     </div>
                     <div class="operate-record-item">
-                        文章总阅读&nbsp;65&nbsp;次。
+                        文章总阅读&nbsp;{{websiteInfo.readingCount}}&nbsp;次。
                     </div>
                 </div>
             </div>
@@ -123,6 +123,7 @@ export default {
                 satoken: 'Bearer ' + localStorage.getItem('satoken')
             },
             userInfo: {},
+            websiteInfo: {},
             infoRules: {
                 username: [
                     { required: true, message: '请输入用户名', trigger: 'blur'}
@@ -158,11 +159,12 @@ export default {
         }
     },
     mounted() {
-        this.loadData()
+        this.loadWebmasterInfo()
+        this.loadWebsiteInfo()
     },
     methods: {
-        loadData() {
-            $get("/user/userInfo", null).then(res=>{
+        loadWebmasterInfo() {
+            $get("/system/webmasterInfo", null).then(res=>{
                 if(res.code === 100) {
                     this.userInfo = {
                         username: res.data.username,
@@ -177,6 +179,17 @@ export default {
                 }
             }).catch(error => {
                 this.$message.error("获取个人信息失败!")
+            })
+        },
+        loadWebsiteInfo() {
+            $get("/system/websiteInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.websiteInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("获取网站信息失败!")
             })
         },
         updateInfo(formName) {
@@ -225,7 +238,7 @@ export default {
             $post("/user/update", param).then(res=>{
                 if(res.code === 100) {
                     this.$message.success(res.msg)
-                    this.loadData()
+                    this.loadWebmasterInfo()
                 } else {
                     this.$message.error(res.msg)
                 }

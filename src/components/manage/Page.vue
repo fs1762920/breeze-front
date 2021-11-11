@@ -6,7 +6,7 @@
         <mavon-editor  
             :toolbars="toolbars"
             style="height: calc(100vh - 150px);"
-            v-model="aboutInfo.content"
+            v-model="aboutInfo.markdownContent"
             @change="change"
             @imgAdd="handleEditorImgAdd"
             ref='md'>
@@ -56,7 +56,7 @@ export default {
                 preview: true, // 预览
             },
             aboutInfo: {
-                content: '',
+                markdownContent: '',
                 htmlContent: ''
             }
         }
@@ -72,8 +72,9 @@ export default {
             $get('/page/find', param).then(res=>{
                 if(res.code === 100) {
                     if (res.data) {
-                        this.aboutInfo.content = res.data.markdownContent
+                        this.aboutInfo.markdownContent = res.data.markdownContent
                         this.aboutInfo.htmlContent = res.data.htmlContent
+                        this.aboutInfo.pageId = res.data.pageId
                     }
                 } else {
                     this.$message.error(res.msg)
@@ -83,14 +84,15 @@ export default {
             })
         },
         change(value, render) {
-            this.aboutInfo.content = value
+            this.aboutInfo.markdownContent = value
             this.aboutInfo.htmlContent = render
         },
         publish() {
             let param = {
                 pageCode: 'about',
-                markdownContent: this.aboutInfo.content,
-                htmlContent: this.aboutInfo.htmlContent
+                markdownContent: this.aboutInfo.markdownContent,
+                htmlContent: this.aboutInfo.htmlContent,
+                pageId: this.aboutInfo.pageId
             }
             $post('/page/save', param).then(res=>{
                 if(res.code === 100) {

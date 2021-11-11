@@ -70,7 +70,7 @@
                             <i class="el-icon-plus"></i></div>
                         </div>
                     <div class="content">
-                        32
+                        {{websiteInfo.blogCount}}
                     </div>
                 </div>
             </el-col>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        165
+                        {{websiteInfo.commentCount}}
                     </div>
                 </div>
             </el-col>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        4089
+                        {{websiteInfo.readingCount}}
                     </div>
                 </div>
             </el-col>
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        82
+                        {{websiteInfo.buildDuration}}
                     </div>
                 </div>
             </el-col>
@@ -169,13 +169,30 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
-            showOperationDrawer: false
+            showOperationDrawer: false,
+            websiteInfo: {}
         }
     },
+    mounted() {
+        this.loadWebsiteInfo()
+    },
     methods: {
+        loadWebsiteInfo() {
+            $get("/system/websiteInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.websiteInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("获取网站信息失败!")
+            })
+        },
         loadOperationList() {
             this.showOperationDrawer = true
         }    

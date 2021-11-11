@@ -97,7 +97,8 @@
             <el-header>
                 <el-dropdown class="user-tab" trigger="click" @command="handleCommand">
                     <div class="user">
-                        <el-avatar :src="sourceUrlPrefix + userInfo.avatar"></el-avatar>
+                        <el-avatar v-if="userInfo.avatar" :src="sourceUrlPrefix + userInfo.avatar"></el-avatar>
+                        <el-avatar v-else :src="require('../assets/default-avatar.png')"></el-avatar>
                     </div>
                     <el-dropdown-menu :split-button="true" slot="dropdown">
                         <el-dropdown-item command='changePass'>修改密码</el-dropdown-item>
@@ -150,19 +151,27 @@ export default {
         }
     },
     mounted() {
-        this.loadUserInfo()
+        this.loadWebmasterInfo()
         this.toDispatch('/manage/statistics')
     },
     methods: {
-        loadUserInfo() {
-            $get("/user/userInfo", null).then(res=>{
+        loadWebmasterInfo() {
+            $get("/system/webmasterInfo", null).then(res=>{
                 if(res.code === 100) {
-                    this.userInfo = res.data
+                    // this.userInfo = res.data
+                    this.userInfo = {
+                        username: res.data.username,
+                        nickname: res.data.nickname,
+                        mail: res.data.mail,
+                        homePath: res.data.homePath,
+                        personalSign: res.data.personalSign,
+                        avatar: res.data.avatar
+                    }
                 } else {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
-                this.$message.error("无法连接到服务器!")
+                this.$message.error("获取个人信息失败!")
             })
         },
         toDispatch(url){

@@ -42,14 +42,19 @@
                         style="width: 100%">
                         <el-table-column
                             prop="classifyName"
+                            align="center"
                             label="名称"
                             width="180">
                         </el-table-column>
                         <el-table-column
                             prop="classifyDescribe"
                             show-overflow-tooltip
+                            align="center"
                             label="描述"
                             width="180">
+                            <template slot-scope="scope">
+                                {{scope.row.classifyDescribe || '--'}}
+                            </template>
                         </el-table-column>
                         <el-table-column
                             align="center"

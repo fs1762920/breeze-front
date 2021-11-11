@@ -30,7 +30,7 @@ Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-export default new Router({
+const router = new Router({
   mode:'history',
   routes: [
     {
@@ -144,3 +144,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  window.scrollTo(0, 0)  
+  next()
+});
+
+export default router;

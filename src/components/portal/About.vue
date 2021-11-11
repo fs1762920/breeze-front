@@ -189,7 +189,7 @@ export default {
         .about-view {
             background-color: rgba(255, 255, 255);
             border-radius: 4px;
-            padding: 20px;
+            padding: 40px;
             margin-top: 20px;
         }
         .comment-group {

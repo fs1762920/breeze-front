@@ -2,12 +2,12 @@
     <div class="view-main">
         <div class="essay-body">
             <div class="cover">
-                <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"></el-image>
+                <el-image v-if="blogInfo.cover" fit="cover" :src="sourceUrlPrefix + blogInfo.cover"></el-image>
             </div>
             <div class="blog-view">
                 <div class="header">
-                    <div class="info">2021-08-15 11:45:12&nbsp;&nbsp;阅读</div>
-                    <div class="title">《毛选》（卷一） 001中国社会各阶级的分析中国社会各阶级的分析</div>
+                    <div class="info">{{dateFormat(blogInfo.mtime)}}&nbsp;&nbsp;{{blogInfo.classifyEntity.classifyName}}</div>
+                    <div class="title">{{blogInfo.title}}</div>
                 </div>
                 <div class="markdown-body" v-html="blogInfo.htmlContent"/>
             </div>
@@ -115,11 +115,15 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             blogInfo: {
-                htmlContent: "<p><strong>asdas</strong><br /><ins>下划线</ins><br /><s>dada</s></p>"
+                classifyEntity: {},
+                labelList: []
             },
             commentForm: {},
             rules: {
@@ -155,9 +159,28 @@ export default {
         }
     },
     mounted() {
-        console.log("当前id: ", this.$route.query.blogId)
+        if (!this.$route.query || !this.$route.query.blogId) {
+            this.$router.push('/portal/home')
+        } else {
+            let param = {
+                blogId: this.$route.query.blogId
+            }
+            this.loadBlogInfo(param)
+        }
+        
     },
     methods: {
+        loadBlogInfo(param) {
+            $get("/blog/findOne", param).then(res=>{
+                if(res.code === 100) {
+                    this.blogInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         submitForm(formName) {
 
         },
@@ -165,7 +188,7 @@ export default {
             this.$refs[formName].resetFields();
         },
         dateFormat(date) {
-            return this.$moment(date).format("YYYY-MM-DD")
+            return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")
         }
     }
 }
@@ -186,7 +209,7 @@ export default {
                 }
             }
             .blog-view {
-                padding: 20px;
+                padding: 40px;
                 .header {
                     .info {
                         font-size: 0.8rem;

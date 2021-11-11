@@ -20,7 +20,7 @@
                     {{item.summary}}
                 </div>
                 <div class="read">
-                    <el-button type="info" size="small" plain @click="blogOverview(1)">阅读更多</el-button>
+                    <el-button type="info" size="small" plain @click="blogOverview(item.blogId)">阅读更多</el-button>
                 </div>
             </div>
         </div>

@@ -33,15 +33,15 @@
                     <div class="overview">
                         <div class="overview-item">
                             <div class="label">文章</div>
-                            <div class="content">10</div>
+                            <div class="content">{{websiteInfo.blogCount}}</div>
                         </div>
                         <div class="overview-item">
                             <div class="label">分类</div>
-                            <div class="content">10</div>
+                            <div class="content">{{websiteInfo.classifyCount}}</div>
                         </div>
                         <div class="overview-item">
                             <div class="label">标签</div>
-                            <div class="content">10</div>
+                            <div class="content">{{websiteInfo.labelCount}}</div>
                         </div>
                     </div>
                     <div class="focus">
@@ -55,10 +55,12 @@
                             <i class="iconfont icon-qq"></i>
                         </div>
                         <div class="contact-item">
-                            <i class="iconfont icon-mail"></i>
+                            <el-tooltip class="item" effect="dark" :content="userInfo.mail" placement="bottom-end">
+                                <i class="iconfont icon-mail"></i>
+                            </el-tooltip>
                         </div>
                         <div class="contact-item">
-                            <i class="iconfont icon-charulianjie"></i>
+                            <i class="iconfont icon-charulianjie" @click="toOuterLink(userInfo.homePath)"></i>
                         </div>
                     </div>
                 </div>
@@ -70,7 +72,7 @@
                 </div>
             </div>
             <div class="main-center">
-                <router-view></router-view>
+                <router-view :key="this.$route.query.blogId"></router-view>
             </div>
             <div class="main-right">
                 <div class="lastest-essay">
@@ -80,7 +82,7 @@
                             <div class="cover">
                                 <el-image fit="cover" :src="sourceUrlPrefix + item.cover"></el-image>
                             </div>
-                            <div class="info">
+                            <div class="info" @click="blogOverview(item.blogId)">
                                 <span>{{dateFormat(item.mtime)}}</span>
                                 <p>{{item.title}}</p>
                             </div>
@@ -105,6 +107,7 @@ export default {
         return {
             sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             userInfo: {},
+            websiteInfo: {},
             labelList: [],
             classifyList: [],
             latestBlogList: []
@@ -112,12 +115,21 @@ export default {
     },
     mounted() {
         this.loadWebmasterInfo()
+        this.loadWebsiteInfo()
         this.loadLabelList()
         this.loadClassifyList()
         this.loadLatestBlogList()
         this.$router.replace('/portal/home')
     },
     methods: {
+        blogOverview(blogId) {
+            this.$router.push({
+                path: '/portal/view',
+                query: {
+                    blogId: blogId
+                }
+            })
+        },
         loadWebmasterInfo() {
             $get("/system/webmasterInfo", null).then(res=>{
                 if(res.code === 100) {
@@ -129,6 +141,17 @@ export default {
                         personalSign: res.data.personalSign,
                         avatar: res.data.avatar
                     }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadWebsiteInfo() {
+            $get("/system/websiteInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.websiteInfo = res.data
                 } else {
                     this.$message.error(res.msg)
                 }
@@ -172,6 +195,9 @@ export default {
         toDispatch(url) {
             this.$router.push(url)
             window.scrollTo(0, 0)
+        },
+        toOuterLink(url) {
+            window.open(url)
         },
         dateFormat(date){
             return this.$moment(date).format("YYYY-MM-DD")

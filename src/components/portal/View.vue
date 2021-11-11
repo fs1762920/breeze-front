@@ -6,10 +6,12 @@
             </div>
             <div class="blog-view">
                 <div class="header">
-                    <div class="info">{{dateFormat(blogInfo.mtime)}}&nbsp;&nbsp;{{blogInfo.classifyEntity.classifyName}}</div>
+                    <div class="info">{{dateFormat(blogInfo.mtime)}}&nbsp;&nbsp;<el-tag size="mini">{{blogInfo.classifyEntity.classifyName}}</el-tag></div>
                     <div class="title">{{blogInfo.title}}</div>
                 </div>
                 <div class="markdown-body" v-html="blogInfo.htmlContent"/>
+                <div class="blog-label">#&nbsp;<span v-for="(item, index) in blogInfo.labelEntityList" :key="index">{{item.labelName}}&nbsp;</span>
+                </div>
             </div>
         </div>
         <div class="comment">
@@ -49,7 +51,6 @@
                                     <el-button type="text" size="small" round @click="resetForm('commentForm')">重置</el-button>
                                     <el-button type="primary" size="small" round @click="submitForm('commentForm')">发表评论</el-button>
                                 </div>
-                                
                             </el-col>
                         </el-row>
                     </el-form>
@@ -159,15 +160,14 @@ export default {
         }
     },
     mounted() {
-        if (!this.$route.query || !this.$route.query.blogId) {
-            this.$router.push('/portal/home')
-        } else {
+        if (this.$route.query.blogId) {
             let param = {
                 blogId: this.$route.query.blogId
             }
-            this.loadBlogInfo(param)
+            this.loadBlogInfo(param);
+        } else {
+            this.$router.push('/portal/home')
         }
-        
     },
     methods: {
         loadBlogInfo(param) {
@@ -219,6 +219,20 @@ export default {
                         margin-top: 10px;
                         font-size: 1.6rem;
                         line-height: 40px;
+                    }
+                }
+                .blog-label {
+                    cursor: pointer;
+                    margin-top: 20px;
+                    color: rgb(138, 138, 138);
+                    span {
+                        height: 40px;
+                        line-height: 40px;
+                        font-size: 1.2rem;
+                        color: rgb(138, 138, 138);
+                        &:hover {
+                            color: rgb(112, 112, 253)
+                        }
                     }
                 }
             }

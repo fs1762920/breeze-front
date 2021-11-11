@@ -11,7 +11,7 @@
             <div class="info">
                 <div class="date">
                     <span>{{dateFormat(item.mtime)}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>分类&nbsp;·&nbsp;{{item.classifyEntity.classifyName}}</span>
+                    <span><el-tag size="mini">{{item.classifyEntity.classifyName}}</el-tag></span>
                 </div>
                 <div class="title">
                     {{item.title}}
@@ -24,7 +24,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="page-group">
             <el-pagination
                 background
@@ -53,14 +52,13 @@ export default {
         this.toPage(1)
     },
     methods: {
-        blogOverview(id) {
-            let param = {
+        blogOverview(blogId) {
+            this.$router.push({
                 path: '/portal/view',
                 query: {
-                    blogId: id
+                    blogId: blogId
                 }
-            }
-            this.$router.push(param)
+            })
         },
         loadData(param) {
             $get("/blog/findByPage", param).then(res=>{

@@ -24,7 +24,7 @@
                             <el-input type=textarea v-model="classifyInfo.classifyDescribe"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="danger" size="small" style="float: right; margin-left: 20px" @click="saveOrUpdate('classifyForm')">新增/编辑分类</el-button>
+                            <el-button type="primary" size="small" style="float: right; margin-left: 20px" @click="saveOrUpdate('classifyForm')">保 存</el-button>
                             <el-button type="text" size="small" style="float: right;" @click="resetForm('classifyForm')">重置</el-button>
                         </el-form-item>
                     </el-form>

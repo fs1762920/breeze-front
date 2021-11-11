@@ -1,6 +1,9 @@
 <template>
     <div class="about-main">
         <div class="title">关于我</div>
+        <div class="about-view">
+            <div class="markdown-body" v-html="pageInfo.htmlContent"/>
+        </div>
         <div class="comment-group">
             <div class="comment-avatar">
                 <el-avatar shape="square" :size="120" :src="require('../../assets/avatar.jpg')"></el-avatar>
@@ -104,9 +107,12 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
+            pageInfo: {},
             commentForm: {},
             rules: {
                 nickname: [
@@ -140,7 +146,24 @@ export default {
             ]
         }
     },
+    mounted() {
+        this.loadPageInfo()
+    },
     methods: {
+        loadPageInfo() {
+            let param = {
+                pageCode: 'about'
+            }
+            $get("/page/find", param).then(res=>{
+                if(res.code === 100) {
+                    this.pageInfo = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         submitForm(formName) {
 
         },
@@ -162,6 +185,12 @@ export default {
             margin-top: 20px;
             font-size: 1.6rem;
             padding-left: 20px;
+        }
+        .about-view {
+            background-color: rgba(255, 255, 255);
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 20px;
         }
         .comment-group {
             background-color: rgba(255, 255, 255);

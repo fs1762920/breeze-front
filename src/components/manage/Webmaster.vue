@@ -178,7 +178,7 @@ export default {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
-                this.$message.error("获取个人信息失败!")
+                this.$message.error("无法连接到服务器!")
             })
         },
         loadWebsiteInfo() {
@@ -189,7 +189,7 @@ export default {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
-                this.$message.error("获取网站信息失败!")
+                this.$message.error("无法连接到服务器!")
             })
         },
         updateInfo(formName) {
@@ -202,7 +202,7 @@ export default {
                             this.$message.error(res.msg)
                         }
                     }).catch(error => {
-                        this.$message.error("保存失败!")
+                        this.$message.error("无法连接到服务器!")
                     })
                 } else {
                     return false
@@ -222,7 +222,7 @@ export default {
                             this.$message.error(res.msg)
                         }
                     }).catch(error => {
-                        this.$message.error("修改失败!")
+                        this.$message.error("无法连接到服务器!")
                     })
                 } else {
                     return false
@@ -243,7 +243,7 @@ export default {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
-                this.$message.error("保存失败!")
+                this.$message.error("无法连接到服务器!")
             })
 
         }

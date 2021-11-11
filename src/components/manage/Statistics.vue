@@ -5,60 +5,22 @@
             :visible.sync="showOperationDrawer"
             direction="rtl">
             <div class="operation-list">
-                <div class="operation-item">
+                <div class="operation-item" v-for="(item, index) in operationList" :key="index">
                     <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">又见炊烟</div>
+                        <div class="title">{{item.action}}</div>
+                        <div class="subject">{{item.relevance}}</div>
                     </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
-                </div>
-                <div class="operation-item">
-                    <div class="info">
-                        <div class="title">文章修改</div>
-                        <div class="subject">《毛选》（卷一） 001中国社会各阶级的分析</div>
-                    </div>
-                    <div class="date">2021-11-21 12:53:11</div>
+                    <div class="date">{{dateFormat(item.ctime)}}</div>
                 </div>
             </div>
             <div class="operation-page">
                 <el-pagination
                     layout="prev, pager, next"
-                    :total="50">
+                    @current-change="toPage"
+                    @prev-click="toPage"
+                    @next-click="toPage"
+                    :total="total"
+                    :page-size="pageSize">
                 </el-pagination>
             </div>
         </el-drawer>
@@ -90,7 +52,7 @@
                 <div class="website-item">
                     <div class="head">
                         <div class="title">阅读量
-                            <el-tooltip content="文章共被阅读67次" placement="top">
+                            <el-tooltip :content="`文章共被阅读 ${websiteInfo.readingCount} 次`" placement="top">
                                 <i class="el-icon-view"></i>
                             </el-tooltip>
                         </div>
@@ -104,7 +66,7 @@
                 <div class="website-item">
                     <div class="head">
                         <div class="title">建立天数
-                            <el-tooltip content="网站建立于 2021-11-04 12:08:12" placement="top">
+                            <el-tooltip :content="`网站建立于 ${websiteInfo.buildTime} `" placement="top">
                                 <i class="el-icon-warning-outline"></i>
                             </el-tooltip>
                         </div>
@@ -152,12 +114,15 @@
                     <el-card class="box-card">
                         <div slot="header">
                             <span>操作记录</span>
-                            <el-button style="float: right;" @click="loadOperationList()" type="text">更多</el-button>
+                            <el-button style="float: right;" @click="operationShow()" type="text">更多</el-button>
                         </div>
                         <div class="operate-group">
-                            <div class="operate-item">
-                                <div class="operate-left"></div>
-                                <div class="operate-right"></div>
+                            <div class="operate-item" v-for="(item, index) in latestOperationList" :key="index">
+                                <div class="info">
+                                    <div class="title">{{item.action}}</div>
+                                    <div class="subject">{{item.relevance}}</div>
+                                </div>
+                                <div class="date">{{dateFormat(item.ctime)}}</div>
                             </div>
                         </div>
                     </el-card>
@@ -174,12 +139,17 @@ export default {
         return {
             showOperationDrawer: false,
             websiteInfo: {},
-            blogList: []
+            blogList: [],
+            total: 0,
+            pageSize: 12,
+            operationList: [],
+            latestOperationList: []
         }
     },
     mounted() {
         this.loadWebsiteInfo()
         this.loadBlogList()
+        this.loadLatestOperationList()
     },
     methods: {
         loadWebsiteInfo() {
@@ -204,7 +174,38 @@ export default {
                 this.$message.error("无法连接到服务器!")
             })
         },
-        loadOperationList() {
+        loadLatestOperationList() {
+            $get("/operation/findLatest", null).then(res=>{
+                if(res.code === 100) {
+                    this.latestOperationList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadOperationList(param) {
+            $get("/operation/findByPage", param).then(res=>{
+                if(res.code === 100) {
+                    this.operationList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        toPage(pageNum) {
+            let param = {
+                pageNum: pageNum,
+                pageSize: this.pageSize
+            }
+            this.loadOperationList(param)
+        },
+        operationShow() {
+            this.toPage(1)
             this.showOperationDrawer = true
         },
         toDispatch(path) {
@@ -324,6 +325,9 @@ export default {
                         height: 48px;
                         line-height: 48px;
                     }
+                    /deep/.el-card__body {
+                        padding: 10px 20px 20px 20px;
+                    }
                     .essay-group {
                         .essay-item {
                             cursor: pointer;
@@ -353,21 +357,33 @@ export default {
                     }
                     .operate-group {
                        .operate-item {
-                           height: 60px;
-                           .operate-left {
-                               .operate-action {
-                                   height: 36px;
-                                   line-height: 36px;
-                               }
-                               .operate-date {
-                                   height: 24px;
-                                   line-height: 24px;
-                               }
-
-                           }
-                           .operate-right {
-                               line-height: 60px;
-                           }
+                            height: 70px;
+                            &:nth-child(n+2){
+                                border-top: 1px solid rgb(228, 228, 228);
+                            }
+                            .info {
+                                height: 40px;
+                                line-height: 40px;
+                                display: flex;
+                                .title {
+                                    width: 40%;
+                                }
+                                .subject {
+                                    text-align: right;
+                                    width: 60%;
+                                    color: rgb(131, 131, 131);
+                                    padding-left: 40px;
+                                    white-space: nowrap;   //规定段落中的文本不进行换行
+                                    text-overflow:ellipsis;
+                                    overflow:hidden;
+                                }
+                            }
+                            .date {
+                                font-size: 0.8rem;
+                                color: rgb(131, 131, 131);
+                                height: 30px;
+                                line-height: 30px;
+                            }
                        } 
                     }
                 }

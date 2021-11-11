@@ -15,7 +15,7 @@
                             <el-input type=textarea v-model="labelInfo.labelDescribe"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="danger" size="small" style="float: right; margin-left: 20px" @click="saveOrUpdate('labelForm')">新增标签</el-button>
+                            <el-button type="primary" size="small" style="float: right; margin-left: 20px" @click="saveOrUpdate('labelForm')">保 存</el-button>
                             <el-button type="text" size="small" style="float: right;" @click="resetForm('labelForm')">重置</el-button>
                         </el-form-item>
                     </el-form>

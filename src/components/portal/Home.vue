@@ -1,8 +1,8 @@
 <template>
     <div class="home-main">
-        <div class="essay-item">
+        <div class="essay-item" v-for="(item, index) in blogList" :key="index">
             <div class="cover">
-                <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">
+                <el-image fit="cover" :src="sourceUrlPrefix + item.cover">
                     <div slot="placeholder" class="image-slot">
                         加载中<span class="dot">...</span>
                     </div>
@@ -10,59 +10,47 @@
             </div>
             <div class="info">
                 <div class="date">
-                    <span>2021-08-21&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>分类&nbsp;·&nbsp;阅读</span>
+                    <span>{{dateFormat(item.mtime)}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>分类&nbsp;·&nbsp;{{item.classifyEntity.classifyName}}</span>
                 </div>
                 <div class="title">
-                    《毛选》（卷一） 001中国社会各阶级的分析
+                    {{item.title}}
                 </div>
                 <div class="description">
-                    毛泽东此文是为反对当时党内存在着的两种倾向而写的。当时党内的第一种倾向，以陈独秀为代表，只注意同国 民党合作，忘记了农民，这是右倾机会主义。第二种倾向，以张国焘为代表，只注意工人运动，同样忘记了农民，这是“左”倾机会主义。这两种机会主义都感觉自己力量不足，而不知道到何处去寻找力量，到何处去取得广大的同盟军。毛泽东指出中国无产阶级的最广大和最忠实的同盟军是农民，这样就解决了中国革命中的最主要的同盟军问题。毛泽东并且预见到当时的民族资产阶级是一个动摇的阶级，他们在革命高涨时将要分化，其右翼将要跑到帝国主义方面去。一九二七年所发生的事变，证明了这一点。
+                    {{item.summary}}
                 </div>
                 <div class="read">
                     <el-button type="info" size="small" plain @click="blogOverview(1)">阅读更多</el-button>
                 </div>
             </div>
         </div>
-        <div class="essay-item">
-            <div class="cover">
-                <el-image fit="cover" src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg">
-                    <div slot="placeholder" class="image-slot">
-                        加载中<span class="dot">...</span>
-                    </div>
-                </el-image>
-            </div>
-            <div class="info">
-                <div class="date">
-                    <span>2021-08-21&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span>分类&nbsp;·&nbsp;阅读</span>
-                </div>
-                <div class="title">
-                    《毛选》（卷一） 001中国社会各阶级的分析
-                </div>
-                <div class="description">
-                    毛泽东此文是为反对当时党内存在着的两种倾向而写的。毛泽东并且预见到当时的民族资产阶级是一个动摇的阶级，他们在革命高涨时将要分化，其右翼将要跑到帝国主义方面去。一九二七年所发生的事变，证明了这一点。
-                </div>
-                <div class="read">
-                    <el-button type="info" size="small" plain>阅读更多</el-button>
-                </div>
-            </div>
-        </div>
+        
         <div class="page-group">
             <el-pagination
                 background
-                layout="prev, pager, next"
-                :total="20">
+                @current-change="toPage"
+                @prev-click="toPage"
+                @next-click="toPage"
+                :total="total"
+                :page-size="pageSize">
             </el-pagination>
         </div>
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
          return {
-             
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
+            blogList: [],
+            total: 0,
+            pageSize: 5
          }
+    },
+    mounted() {
+        this.toPage(1)
     },
     methods: {
         blogOverview(id) {
@@ -73,6 +61,28 @@ export default {
                 }
             }
             this.$router.push(param)
+        },
+        loadData(param) {
+            $get("/blog/findByPage", param).then(res=>{
+                if(res.code === 100) {
+                    this.blogList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        toPage(pageNum) {
+            let param = {
+                pageNum: pageNum,
+                pageSize: this.pageSize
+            }
+            this.loadData(param)
+        },
+        dateFormat(date){
+            return this.$moment(date).format("YYYY-MM-DD")
         }
     }
 }

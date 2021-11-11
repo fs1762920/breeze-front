@@ -3,11 +3,11 @@
         <el-header>
             <div class="head">
                 <div class="nav">
-                    <el-menu default-active="1" mode="horizontal">
-                        <el-menu-item index="1" @click="toDispatch('/portal/home')">首页</el-menu-item>
-                        <el-menu-item index="2" @click="toDispatch('/portal/friend')">友情链接</el-menu-item>
-                        <el-menu-item index="3" @click="toDispatch('/portal/time')">文章归档</el-menu-item>
-                        <el-menu-item index="4" @click="toDispatch('/portal/about')">关于</el-menu-item>
+                    <el-menu :default-active="this.$route.path" mode="horizontal">
+                        <el-menu-item index="/portal/home" @click="toDispatch('/portal/home')">首页</el-menu-item>
+                        <el-menu-item index="/portal/friend" @click="toDispatch('/portal/friend')">友情链接</el-menu-item>
+                        <el-menu-item index="/portal/time" @click="toDispatch('/portal/time')">文章归档</el-menu-item>
+                        <el-menu-item index="/portal/about" @click="toDispatch('/portal/about')">关于</el-menu-item>
                     </el-menu>
                 </div>
                 <div class="operate-group">
@@ -21,10 +21,10 @@
             <div class="main-left">
                 <div class="master-info">
                     <div class="avatar">
-                        <el-avatar :size="120" :src="require('../assets/avatar.jpg')"></el-avatar>
+                        <el-avatar v-if="userInfo.avatar" :size="120" :src="sourceUrlPrefix + userInfo.avatar"></el-avatar>
                     </div>
                     <div class="content">
-                        <div class="nickname">又见炊烟</div>
+                        <div class="nickname">{{userInfo.nickname}}</div>
                         <div class="hometown">
                             <i class="el-icon-location"></i>
                             陕西 西安
@@ -65,10 +65,7 @@
                 <div class="classify-essay">
                     <div class="title">分类</div>
                     <div class="classify-group">
-                        <div class="classify-item">推荐<div class="count">0</div></div>
-                        <div class="classify-item">技术<div class="count">0</div></div>
-                        <div class="classify-item">阅读<div class="count">110</div></div>
-                        <div class="classify-item">杂文<div class="count">0</div></div>
+                        <div class="classify-item" v-for="(item, index) in classifyList" :key="index">{{item.classifyName}}<div class="count">{{item.blogCount}}</div></div>
                     </div>
                 </div>
             </div>
@@ -79,22 +76,13 @@
                 <div class="lastest-essay">
                     <div class="title">最新文章</div>
                     <div class="essay-group">
-                        <div class="essay-item">
+                        <div class="essay-item" v-for="(item, index) in latestBlogList" :key="index">
                             <div class="cover">
-                                <el-image fit="cover" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-image>
+                                <el-image fit="cover" :src="sourceUrlPrefix + item.cover"></el-image>
                             </div>
                             <div class="info">
-                                <span>2021-08-21</span>
-                                <p>《毛选》（卷一） 001中国社会各阶级的分析</p>
-                            </div>
-                        </div>
-                        <div class="essay-item">
-                            <div class="cover">
-                                <el-image fit="cover" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"></el-image>
-                            </div>
-                            <div class="info">
-                                <span>2021-08-21</span>
-                                <p>《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析《毛选》（卷一） 001中国社会各阶级的分析</p>
+                                <span>{{dateFormat(item.mtime)}}</span>
+                                <p>{{item.title}}</p>
                             </div>
                         </div>
                     </div>
@@ -102,17 +90,7 @@
                 <div class="label-content">
                     <div class="title">标签</div>
                     <div class="label-group">
-                        <div class="label-item">
-                            <el-tag size="small">社科</el-tag>
-                            <el-tag size="small">React</el-tag>
-                            <el-tag size="small">Docker</el-tag>
-                            <el-tag size="small">服务器</el-tag>
-                            <el-tag size="small">CentOS</el-tag>
-                            <el-tag size="small">Linux</el-tag>
-                            <el-tag size="small">Vue</el-tag>
-                            <el-tag size="small">spring boot</el-tag>
-                            <el-tag size="small">Java</el-tag>
-                        </div>
+                        <el-tag v-for="(item, index) in labelList" :key="index" size="small">{{item.labelName}}</el-tag>
                     </div>
                 </div>
             </div>
@@ -120,17 +98,83 @@
     </el-container>
 </template>
 <script>
+import {$get, $post} from '../api/RestUtils'
+
 export default {
     data() {
-
+        return {
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
+            userInfo: {},
+            labelList: [],
+            classifyList: [],
+            latestBlogList: []
+        }
     },
     mounted() {
+        this.loadWebmasterInfo()
+        this.loadLabelList()
+        this.loadClassifyList()
+        this.loadLatestBlogList()
         this.$router.replace('/portal/home')
     },
     methods: {
+        loadWebmasterInfo() {
+            $get("/system/webmasterInfo", null).then(res=>{
+                if(res.code === 100) {
+                    this.userInfo = {
+                        username: res.data.username,
+                        nickname: res.data.nickname,
+                        mail: res.data.mail,
+                        homePath: res.data.homePath,
+                        personalSign: res.data.personalSign,
+                        avatar: res.data.avatar
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadLabelList() {
+            $get("/label/find", null).then(res=>{
+                if(res.code === 100) {
+                    this.labelList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadClassifyList() {
+            $get("/classify/find", null).then(res=>{
+                if(res.code === 100) {
+                    this.classifyList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadLatestBlogList() {
+            $get("/blog/findLatest", null).then(res=>{
+                if(res.code === 100) {
+                    this.latestBlogList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         toDispatch(url) {
             this.$router.push(url)
             window.scrollTo(0, 0)
+        },
+        dateFormat(date){
+            return this.$moment(date).format("YYYY-MM-DD")
         }
     }
 }
@@ -344,11 +388,10 @@ export default {
                     color: cadetblue;
                 }
                 .label-group {
-                    .label-item {
-                        .el-tag {
-                            margin-top: 10px;
-                            cursor: pointer;
-                        }
+                    .el-tag {
+                        margin-top: 10px;
+                        margin-right: 4px;
+                        cursor: pointer;
                     }
                 }
             }

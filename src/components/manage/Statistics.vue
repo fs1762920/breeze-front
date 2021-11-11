@@ -67,7 +67,7 @@
                 <div class="website-item">
                     <div class="head">
                         <div class="title">文章
-                            <i class="el-icon-plus"></i></div>
+                            <i class="el-icon-plus" @click="toDispatch('/manage/compose')"></i></div>
                         </div>
                     <div class="content">
                         {{websiteInfo.blogCount}}
@@ -78,7 +78,7 @@
                 <div class="website-item">
                     <div class="head">
                         <div class="title">评论
-                            <i class="el-icon-bangzhu"></i>
+                            <i class="el-icon-bangzhu" @click="toDispatch('/manage/comment')"></i>
                         </div>
                     </div>
                     <div class="content">
@@ -121,13 +121,11 @@
                     <el-tabs type="border-card">
                         <el-tab-pane label="最近文章">
                             <div class="essay-group">
-                                <div class="essay-item">
-                                    <div class="title">对img设置竖直方向对齐为middle</div>
-                                    <div class="date">2021-11-05 12:11:31</div>
-                                </div>
-                                <div class="essay-item">
-                                    <div class="title">对img设置竖直方向对齐为middle</div>
-                                    <div class="date">2021-11-05 12:11:31</div>
+                                <div class="essay-item" v-for="(item, index) in blogList" :key="index">
+                                    <el-tooltip effect="dark" :content="item.title" placement="right">
+                                        <div class="title">{{item.title}}</div>
+                                    </el-tooltip>
+                                    <div class="date">{{dateFormat(item.mtime)}}</div>
                                 </div>
                             </div>
                         </el-tab-pane>
@@ -175,11 +173,13 @@ export default {
     data() {
         return {
             showOperationDrawer: false,
-            websiteInfo: {}
+            websiteInfo: {},
+            blogList: []
         }
     },
     mounted() {
         this.loadWebsiteInfo()
+        this.loadBlogList()
     },
     methods: {
         loadWebsiteInfo() {
@@ -190,12 +190,29 @@ export default {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
-                this.$message.error("获取网站信息失败!")
+                this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadBlogList() {
+            $get("/blog/findLatest", null).then(res=>{
+                if(res.code === 100) {
+                    this.blogList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
             })
         },
         loadOperationList() {
             this.showOperationDrawer = true
-        }    
+        },
+        toDispatch(path) {
+            this.$router.push(path)
+        },
+        dateFormat(date){
+            return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")
+        }
     }
     
 }
@@ -320,6 +337,9 @@ export default {
                             }
                             .title {
                                 width: 60%;
+                                white-space: nowrap;   //规定段落中的文本不进行换行
+                                text-overflow:ellipsis;
+                                overflow:hidden;
                                 &:hover {
                                     color: rgb(151, 151, 255);
                                 }

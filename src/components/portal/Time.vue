@@ -12,6 +12,10 @@
                 :is-last="index === blogList.length-1"
             />
         </div>
+        <div class=load-more>
+            <el-button class="load" v-if="hasNextPage" type="primary" @click="loadMore">点击加载更多</el-button>
+            <div class="nomore" v-else>没有更多了...</div>
+        </div>
     </div>
 </template>
 <script>
@@ -22,12 +26,14 @@ export default {
         return {
             sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             blogList: [],
+            currentPage: 1,
             total: 0,
-            pageSize: 5
+            pageSize: 5,
+            hasNextPage: false
         }
     },
     mounted() {
-        this.toPage(1)
+        this.toPage(this.currentPage)
     },
     methods: {
         blogOverview(id) {
@@ -44,12 +50,19 @@ export default {
                 if(res.code === 100) {
                     this.blogList = res.data.list
                     this.total = res.data.total
+                    this.hasNextPage = res.data.hasNextPage
                 } else {
                     this.$message.error(res.msg)
                 }
             }).catch(error => {
                 this.$message.error("无法连接到服务器!")
             })
+        },
+        loadMore() {
+            if (this.hasNextPage) {
+                this.currentPage += 1
+                this.toPage(this.currentPage)
+            }
         },
         toPage(pageNum) {
             let param = {
@@ -68,8 +81,8 @@ export default {
         padding: 40px;
         margin-top: 20px;
         .timeline {
-            min-height: 80vh;
-            padding-bottom: 80px;
+            // min-height: 80vh;
+            padding-bottom: 20px;
             cursor: pointer;
             /deep/.gb-vue-timeline-update__title {
                 overflow:hidden;  //超出部分隐藏
@@ -82,6 +95,31 @@ export default {
             }
             /deep/.gb-vue-timeline-update__right {
                 width: 20vw;
+            }
+        }
+        .load-more {
+            width: 60%;
+            margin-left: 40%;
+            margin-top: 40px;
+            .el-button {
+                border-radius: 20px;
+                border: none;
+                width: 40%;
+                
+                box-shadow: 1px 1px 4px 1px #dddddd;
+                margin: 0 auto
+            }
+            .el-button--primary {
+                border-color: white;
+                background-image: linear-gradient(to right, rgb(87, 146, 255) , rgb(188, 208, 252));
+                color: #FFF;
+            }
+            .load:hover {
+                background-image: linear-gradient(to right, rgb(154, 154, 255) , rgb(209, 209, 255));
+                color: #FFF;
+            }
+            .nomore {
+                color: #cccccc
             }
         }
     }

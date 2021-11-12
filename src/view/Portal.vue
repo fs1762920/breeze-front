@@ -136,7 +136,6 @@ export default {
             })
         },
         loadClassifyBlogList(classifyId) {
-            console.log("---classifyId: ", classifyId)
             this.$router.push({
                 path: '/portal/home',
                 query: {
@@ -145,7 +144,6 @@ export default {
             })
         },
         loadLabelBlogList(labelId) {
-            console.log("---labelId: ", labelId)
             this.$router.push({
                 path: '/portal/home',
                 query: {

@@ -10,7 +10,7 @@
                     <div class="title">{{blogInfo.title}}</div>
                 </div>
                 <div class="markdown-body" v-html="blogInfo.htmlContent"/>
-                <div class="blog-label">#&nbsp;<span v-for="(item, index) in blogInfo.labelEntityList" :key="index">{{item.labelName}}&nbsp;</span>
+                <div class="blog-label">#&nbsp;<span v-for="(item, index) in blogInfo.labelEntityList" :key="index" @click="loadLabelBlogList(item.labelId)">{{item.labelName}}&nbsp;</span>
                 </div>
             </div>
         </div>
@@ -160,7 +160,6 @@ export default {
         }
     },
     mounted() {
-        console.log("blogId:", this.$route.query.blogId)
         if (this.$route.query.blogId) {
             let param = {
                 blogId: this.$route.query.blogId
@@ -180,6 +179,14 @@ export default {
                 }
             }).catch(error => {
                 this.$message.error("无法连接到服务器!")
+            })
+        },
+        loadLabelBlogList(labelId) {
+            this.$router.push({
+                path: '/portal/home',
+                query: {
+                    labelId: labelId
+                }
             })
         },
         submitForm(formName) {

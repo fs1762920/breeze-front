@@ -70,6 +70,10 @@
                     <i class="iconfont icon-pinglun"></i>
                     <span slot="title">&nbsp;评论</span>
                 </el-menu-item>
+                <el-menu-item index="/manage/link" @click="toDispatch('/manage/link')">
+                    <i class="iconfont icon-tianjiapengyou"></i>
+                    <span slot="title">&nbsp;友情链接</span>
+                </el-menu-item>
                 <el-submenu index="/webmaster">
                     <template slot="title">
                         <i class="iconfont icon-yonghu"></i>

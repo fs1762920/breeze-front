@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12662246",
+      "name": "添加朋友",
+      "font_class": "tianjiapengyou",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
       "icon_id": "1002631",
       "name": "图片",
       "font_class": "icon",

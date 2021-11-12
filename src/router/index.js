@@ -23,6 +23,7 @@ import Statistics from '@/components/manage/Statistics'
 import Tool from '@/components/manage/Tool'
 import Webmaster from '@/components/manage/Webmaster'
 import Website from '@/components/manage/Website'
+import Link from '@/components/manage/Link'
 
 
 Vue.use(Router)
@@ -145,6 +146,11 @@ const router = new Router({
           path: '/manage/website',
           name: 'website',
           component: Website,
+        },
+        {
+          path: '/manage/link',
+          name: 'link',
+          component: Link
         }
       ]
     }

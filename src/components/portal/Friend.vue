@@ -121,38 +121,13 @@
 export default {
     data() {
         return {
-            friendInfo: {}
+            friendList: []
         }
     }
 }
 </script>
 <style lang="less" scoped>
     .friend-main {
-        .friend-form {
-            /deep/.avatar-uploader .el-upload {
-                border: 1px dashed #d9d9d9;
-                border-radius: 6px;
-                cursor: pointer;
-                position: relative;
-                overflow: hidden;
-            }
-            .avatar-uploader .el-upload:hover {
-                border-color: #409EFF;
-            }
-            .avatar-uploader-icon {
-                font-size: 28px;
-                color: #8c939d;
-                width: 178px;
-                height: 178px;
-                line-height: 178px;
-                text-align: center;
-            }
-            .avatar {
-                width: 178px;
-                height: 178px;
-                display: block;
-            }
-        }
         .header {
             background-color: rgba(255, 255, 255);
             border-radius: 4px;

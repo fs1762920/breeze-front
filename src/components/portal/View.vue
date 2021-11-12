@@ -17,7 +17,7 @@
         <div class="comment">
             <div class="comment-group">
                 <div class="comment-avatar">
-                    <el-avatar shape="square" :size="120" :src="require('../../assets/avatar.jpg')"></el-avatar>
+                    <el-avatar v-if="customInfo.avatarPath" shape="square" :size="120" :src="customInfo.customType === 1?(sourceUrlPrefix + customInfo.avatarPath):customInfo.avatarPath"></el-avatar>
                 </div>
                 <div class="comment-form">
                     <el-form ref="commentForm" :rules="rules" :model="commentForm" label-width="60px">
@@ -165,11 +165,32 @@ export default {
                 blogId: this.$route.query.blogId
             }
             this.loadBlogInfo(param);
+            this.loadCustomInfo()
         } else {
             this.$router.push('/portal/home')
         }
     },
     methods: {
+        loadCustomInfo() {
+            $get("/custom/info", null).then(res=>{
+                if(res.code === 100) {
+                    this.customInfo = res.data
+                    if (res.data) {
+                        this.commentForm = {
+                            avatarPath: res.data.avatarPath,
+                            nickname: res.data.nickname,
+                            mail: res.data.mail,
+                            homePage: res.data.homePage,
+                        }
+                    }
+                    
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         loadBlogInfo(param) {
             $get("/blog/findOne", param).then(res=>{
                 if(res.code === 100) {

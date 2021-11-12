@@ -6,7 +6,7 @@
         </div>
         <div class="comment-group">
             <div class="comment-avatar">
-                <el-avatar shape="square" :size="120" :src="require('../../assets/avatar.jpg')"></el-avatar>
+                <el-avatar v-if="customInfo.avatarPath" shape="square" :size="120" :src="customInfo.customType === 1?(sourceUrlPrefix + customInfo.avatarPath):customInfo.avatarPath"></el-avatar>
             </div>
             <div class="comment-form">
                 <el-form ref="commentForm" :rules="rules" :model="commentForm" label-width="60px">
@@ -112,7 +112,9 @@ import {$get, $post} from '../../api/RestUtils'
 export default {
     data() {
         return {
+            sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             pageInfo: {},
+            customInfo: {},
             commentForm: {},
             rules: {
                 nickname: [
@@ -148,8 +150,29 @@ export default {
     },
     mounted() {
         this.loadPageInfo()
+        this.loadCustomInfo()
     },
     methods: {
+        loadCustomInfo() {
+            $get("/custom/info", null).then(res=>{
+                if(res.code === 100) {
+                    this.customInfo = res.data
+                    if (res.data) {
+                        this.commentForm = {
+                            avatarPath: res.data.avatarPath,
+                            nickname: res.data.nickname,
+                            mail: res.data.mail,
+                            homePage: res.data.homePage,
+                        }
+                    }
+                    
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         loadPageInfo() {
             let param = {
                 pageCode: 'about'

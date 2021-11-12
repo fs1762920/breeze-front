@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="main-center">
-                <router-view :key="this.$route.query.blogId + this.$route.query.classifyId + this.$route.query.labelId"></router-view>
+                <router-view :key="JSON.stringify(this.$route.query)"></router-view>
             </div>
             <div class="main-right">
                 <div class="lastest-essay">
@@ -125,8 +125,18 @@ export default {
         } else {
             this.$router.replace('/portal/home')
         }
+        this.saveCustomInfo()
     },
     methods: {
+        saveCustomInfo() {
+            $post("/custom/save", null).then(res=>{
+                if(res.code != 100) {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
+        },
         blogOverview(blogId) {
             this.$router.push({
                 path: '/portal/view',
@@ -247,7 +257,7 @@ export default {
         }
     }
     .main {
-        padding: 0 14vw 0 14vw;
+        padding: 0 12vw 0 12vw;
         min-height: 100vh;
         padding-bottom: 80px;
         background-color: rgb(238, 238, 238);
@@ -367,7 +377,7 @@ export default {
             }
         }
         .main-center {
-            width: 36vw;
+            width: 40vw;
             margin-left: 2vw;
         }
         .main-right {

@@ -7,6 +7,7 @@
                         <el-menu-item index="/portal/home" @click="toDispatch('/portal/home')">首页</el-menu-item>
                         <el-menu-item index="/portal/friend" @click="toDispatch('/portal/friend')">友情链接</el-menu-item>
                         <el-menu-item index="/portal/time" @click="toDispatch('/portal/time')">文章归档</el-menu-item>
+                        <el-menu-item index="/portal/picture" @click="toDispatch('/portal/picture')">照片墙</el-menu-item>
                         <el-menu-item index="/portal/about" @click="toDispatch('/portal/about')">关于</el-menu-item>
                     </el-menu>
                 </div>
@@ -67,12 +68,12 @@
                 <div class="classify-essay">
                     <div class="title">分类</div>
                     <div class="classify-group">
-                        <div class="classify-item" v-for="(item, index) in classifyList" :key="index">{{item.classifyName}}<div class="count">{{item.blogCount}}</div></div>
+                        <div class="classify-item" v-for="(item, index) in classifyList" :key="index" @click="loadClassifyBlogList(item.classifyId)">{{item.classifyName}}<div class="count">{{item.blogCount}}</div></div>
                     </div>
                 </div>
             </div>
             <div class="main-center">
-                <router-view :key="this.$route.query.blogId"></router-view>
+                <router-view :key="this.$route.query.blogId + this.$route.query.classifyId + this.$route.query.labelId"></router-view>
             </div>
             <div class="main-right">
                 <div class="lastest-essay">
@@ -92,7 +93,7 @@
                 <div class="label-content">
                     <div class="title">标签</div>
                     <div class="label-group">
-                        <el-tag v-for="(item, index) in labelList" :key="index" size="small">{{item.labelName}}</el-tag>
+                        <el-tag v-for="(item, index) in labelList" :key="index" size="small" @click="loadLabelBlogList(item.labelId)">{{item.labelName}}</el-tag>
                     </div>
                 </div>
             </div>
@@ -127,6 +128,24 @@ export default {
                 path: '/portal/view',
                 query: {
                     blogId: blogId
+                }
+            })
+        },
+        loadClassifyBlogList(classifyId) {
+            console.log("---classifyId: ", classifyId)
+            this.$router.push({
+                path: '/portal/home',
+                query: {
+                    classifyId: classifyId
+                }
+            })
+        },
+        loadLabelBlogList(labelId) {
+            console.log("---labelId: ", labelId)
+            this.$router.push({
+                path: '/portal/home',
+                query: {
+                    labelId: labelId
                 }
             })
         },

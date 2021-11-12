@@ -8,6 +8,7 @@ import Login from '@/view/Login'
 import Home from '@/components/portal/Home'
 import Time from '@/components/portal/Time'
 import Friend from '@/components/portal/Friend'
+import Picture from '@/components/portal/Picture'
 import About from '@/components/portal/About'
 import View from '@/components/portal/View'
 
@@ -57,6 +58,11 @@ const router = new Router({
           path: '/portal/friend',
           name: 'friend',
           component: Friend,
+        },
+        {
+          path: '/portal/picture',
+          name: 'picture',
+          component: Picture,
         },
         {
           path: '/portal/about',

@@ -44,12 +44,21 @@ export default {
          return {
             sourceUrlPrefix: process.env.SOURCE_BASE_URL,
             blogList: [],
+            queryParam: {},
             total: 0,
             pageSize: 5
          }
     },
     mounted() {
-        this.toPage(1)
+        this.$set(this.queryParam, 'pageNum', 1)
+        this.$set(this.queryParam, 'pageSize', 5)
+        if (this.$route.query.classifyId) {
+            this.$set(this.queryParam, 'classifyId', this.$route.query.classifyId)
+        }
+        if (this.$route.query.labelId) {
+            this.$set(this.queryParam, 'labelId', this.$route.query.labelId)
+        }
+        this.loadData(this.queryParam)
     },
     methods: {
         blogOverview(blogId) {
@@ -86,7 +95,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    .main {
+    .home-main {
         .essay-item {
             margin-top: 20px;
             background-color: #ffffff;

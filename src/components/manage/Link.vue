@@ -2,7 +2,7 @@
     <div class="link-main">
         <el-dialog
             :title="friendInfo.friendId?'修改友情链接':'添加友情链接'"
-            :visible.sync="show"
+            :visible.sync="friendFormShow"
             @close="resetForm('friendForm')"
             width="28%">
             <el-form :model="friendInfo" status-icon :rules="rules" ref="friendForm" label-width="72px">
@@ -28,7 +28,7 @@
             </el-form>
         </el-dialog>
         <div class="link-operate">
-            <el-button type="success" size="small" @click="show = true">添加友链</el-button>
+            <el-button type="success" size="small" @click="friendFormShow = true">添加友链</el-button>
         </div>
         <div class="link-table">
             <el-table 
@@ -45,22 +45,29 @@
                     prop="avatarPath"
                     show-overflow-tooltip
                     align="center"
-                    label="头像链接"
-                    width="300">
+                    label="头像"
+                    width="120">
+                    <template slot-scope="scope">
+                        <el-tooltip class="item" effect="dark" :content="scope.row.avatarPath" placement="right">
+                            <el-avatar :src="scope.row.avatarPath"></el-avatar>
+                        </el-tooltip>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="homePage"
                     show-overflow-tooltip
                     align="center"
                     label="博客地址"
-                    width="240">
+                    width="280">
+                    <template slot-scope="scope">
+                        <el-link :href="scope.row.homePage" type="primary" target="_blank">{{scope.row.homePage}}</el-link>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="personalSign"
                     show-overflow-tooltip
                     align="center"
                     label="个人介绍"
-                    width="280">
+                    width="400">
                 </el-table-column>
                 <el-table-column
                     prop="ctime"
@@ -111,7 +118,7 @@ export default {
     data() {
         return {
             dialogTitle: '',
-            show: false,
+            friendFormShow: false,
             friendInfo: {},
             rules: {},
             friendList: [
@@ -158,7 +165,7 @@ export default {
         },
         showEditDialog(friendInfo) {
             this.friendInfo = friendInfo
-            this.show = true
+            this.friendFormShow = true
         },
         addOrEditClassify(formName) {
             let url;
@@ -170,7 +177,7 @@ export default {
             $post(url, param).then(res=>{
                 if(res.code === 100) {
                     this.$message.success(res.msg)
-                    this.show = false
+                    this.friendFormShow = false
                     this.resetForm(formName)
                     this.toPage(1)
                 } else {

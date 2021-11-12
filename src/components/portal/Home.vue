@@ -1,6 +1,9 @@
 <template>
     <div class="home-main">
-        <div class="essay-item" v-for="(item, index) in blogList" :key="index">
+        <div v-if="blogList.length === 0">
+            <el-empty description="暂无相关文章"></el-empty>
+        </div>
+        <div v-else class="essay-item" v-for="(item, index) in blogList" :key="index">
             <div class="cover">
                 <el-image fit="cover" :src="sourceUrlPrefix + item.cover">
                     <div slot="placeholder" class="image-slot">

@@ -160,6 +160,7 @@ export default {
         }
     },
     mounted() {
+        console.log("blogId:", this.$route.query.blogId)
         if (this.$route.query.blogId) {
             let param = {
                 blogId: this.$route.query.blogId

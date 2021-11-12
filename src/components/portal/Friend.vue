@@ -1,44 +1,7 @@
 <template>
     <div class="friend-main">
-        <el-dialog
-            class="friend-form"
-            title="申请友链"
-            :visible.sync="friendApplyShow"
-            width="30%">
-            <el-form ref="friendForm" :model="friendInfo" label-width="80px">
-                <el-form-item label="昵称" prop="nickname">
-                    <el-input v-model="friendInfo.nickname"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" prop="mail">
-                    <el-input v-model="friendInfo.mail"></el-input>
-                </el-form-item>
-                <el-form-item label="头像链接" prop="avatar">
-                    <el-input v-model="friendInfo.avatar"></el-input>
-                </el-form-item>
-                <!-- <el-form-item label="头像" prop="avatar">
-                    <el-upload
-                        class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false">
-                        <img v-if="friendInfo.avatar" :src="friendInfo.avatar" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item> -->
-                <el-form-item label="博客主页" prop="homePage">
-                    <el-input v-model="friendInfo.homePage"></el-input>
-                </el-form-item>
-                <el-form-item label="个性签名" prop="sign">
-                    <el-input type="textarea" :maxlength="50" :row="3" sho-word-limit v-model="friendInfo.sign"></el-input>
-                </el-form-item>
-                <el-form-item >
-                    <el-button type="">重置</el-button>
-                    <el-button type="primary">提交申请</el-button>
-                </el-form-item>
-            </el-form>
-        </el-dialog>
         <div class="header">
             <div class="title">友情链接</div>
-            <div class="apply"><el-button type="text" @click="friendApplyShow = true">申请友链</el-button></div>
         </div>
         <div class="friend-group">
             <div class="friend-item">
@@ -133,12 +96,23 @@
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <div class="label">申请须知</div>
-            <div class="content">
-                <div class="content-item">1. 请确认您的网站可正常访问</div>
-                <div class="content-item">2. 不接受含有黄赌毒、政治敏感、暴力的网站</div>
-                <div class="content-item">3. 添加本站链接</div>
+        <div class="friend-note">
+            <div class="friend-note-item">
+                <div class="label">网站要求</div>
+                <div class="content">
+                    <div class="content-item">1. 请确认您的网站可正常访问</div>
+                    <div class="content-item">2. 不接受含有黄赌毒、政治敏感、暴力的网站</div>
+                    <div class="content-item">3. 需要交换友链，先把本站添加到你的网站中，同时根据下面的格式，给我发email或在留言板给我留言</div>
+                </div>
+            </div>
+            <div class="friend-note-item">
+                <div class="label">申请格式</div>
+                <div class="content">
+                    <div class="content-item">1. 博客标题:&nbsp;breeze</div>
+                    <div class="content-item">2. 博客地址:&nbsp;http://localhost:8080</div>
+                    <div class="content-item">3. 头像链接:&nbsp;http://localhost:8080/upload/file/2315dsf4rwqr.jpeg</div>
+                    <div class="content-item">4. 个人介绍(不超过50字):&nbsp;年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。</div>
+                </div>
             </div>
         </div>
     </div>
@@ -147,7 +121,6 @@
 export default {
     data() {
         return {
-            friendApplyShow: false,
             friendInfo: {}
         }
     }
@@ -239,23 +212,27 @@ export default {
                 }
             }
         }
-        .footer {
+        .friend-note {
+            margin-top: 20px;
             background-color: rgba(255, 255, 255);
             border-radius: 4px;
             padding: 20px 20px 20px 20px;
-            margin-top: 20px;
-            .label {
-                font-size: 1.2rem;
+            .friend-note-item {
+                margin-top: 20px;
+                .label {
+                    font-size: 1.2rem;
 
-            }
-            .content {
-                font-size: 0.8rem;
-                padding: 10px 20px;
-                .content-item {
-                    height: 30px;
-                    line-height: 30px;
+                }
+                .content {
+                    font-size: 0.8rem;
+                    padding: 10px 20px;
+                    .content-item {
+                        height: 30px;
+                        line-height: 30px;
+                    }
                 }
             }
+            
         }
     }
 </style>

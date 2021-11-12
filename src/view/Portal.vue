@@ -120,7 +120,11 @@ export default {
         this.loadLabelList()
         this.loadClassifyList()
         this.loadLatestBlogList()
-        this.$router.replace('/portal/home')
+        if(this.$route.query.blogId) {
+            this.blogOverview(this.$route.query.blogId)
+        } else {
+            this.$router.replace('/portal/home')
+        }
     },
     methods: {
         blogOverview(blogId) {

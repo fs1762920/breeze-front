@@ -83,7 +83,7 @@
                     <el-tabs type="border-card">
                         <el-tab-pane label="最近文章">
                             <div class="essay-group">
-                                <div class="essay-item" v-for="(item, index) in blogList" :key="index">
+                                <div class="essay-item" v-for="(item, index) in blogList" :key="index" @click="blogOverview(item.blogId)">
                                     <el-tooltip effect="dark" :content="item.title" placement="right">
                                         <div class="title">{{item.title}}</div>
                                     </el-tooltip>
@@ -196,6 +196,15 @@ export default {
             }).catch(error => {
                 this.$message.error("无法连接到服务器!")
             })
+        },
+        blogOverview(blogId) {
+            let routeUrl = this.$router.resolve({
+                path: '/portal/view',
+                query: {
+                    blogId: blogId
+                }
+            });
+            window.open(routeUrl.href, '_blank');
         },
         toPage(pageNum) {
             let param = {

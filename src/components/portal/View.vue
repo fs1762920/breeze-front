@@ -6,11 +6,11 @@
             </div>
             <div class="blog-view">
                 <div class="header">
-                    <div class="info">{{dateFormat(blogInfo.mtime)}}&nbsp;&nbsp;<el-tag size="mini">{{blogInfo.classifyEntity.classifyName}}</el-tag></div>
+                    <div class="info">{{dateFormat(blogInfo.mtime)}}&nbsp;&nbsp;<el-tag size="mini" @click="loadClassifyBlogList(blogInfo.classifyEntity.classifyId)">{{blogInfo.classifyEntity.classifyName}}</el-tag></div>
                     <div class="title">{{blogInfo.title}}</div>
                 </div>
                 <div class="markdown-body" v-html="blogInfo.htmlContent"/>
-                <div class="blog-label">#&nbsp;<span v-for="(item, index) in blogInfo.labelEntityList" :key="index" @click="loadLabelBlogList(item.labelId)">{{item.labelName}}&nbsp;</span>
+                <div class="blog-label"><span v-for="(item, index) in blogInfo.labelEntityList" :key="index" @click="loadLabelBlogList(item.labelId)">{{'#' + item.labelName}}&nbsp;&nbsp;</span>
                 </div>
             </div>
         </div>
@@ -181,6 +181,14 @@ export default {
                 this.$message.error("无法连接到服务器!")
             })
         },
+        loadClassifyBlogList(classifyId) {
+            this.$router.push({
+                path: '/portal/home',
+                query: {
+                    classifyId: classifyId
+                }
+            })
+        },
         loadLabelBlogList(labelId) {
             this.$router.push({
                 path: '/portal/home',
@@ -228,15 +236,19 @@ export default {
                         font-size: 1.6rem;
                         line-height: 40px;
                     }
+                    .el-tag {
+                        cursor: pointer;
+                    }
                 }
                 .blog-label {
                     cursor: pointer;
                     margin-top: 20px;
                     color: rgb(138, 138, 138);
                     span {
+                        font-family: "Microsoft JhengHei";
                         height: 40px;
                         line-height: 40px;
-                        font-size: 1.2rem;
+                        // font-weight: 600;
                         color: rgb(138, 138, 138);
                         &:hover {
                             color: rgb(112, 112, 253)

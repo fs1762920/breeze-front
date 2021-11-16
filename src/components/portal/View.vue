@@ -24,93 +24,205 @@
                         <el-row>
                             <el-col :span="8">
                                 <el-form-item label="昵称" prop="nickname">
-                                    <el-input v-model="commentForm.nickname"></el-input>
+                                    <el-input :disabled="blogInfo.commented === 0" v-model="commentForm.nickname"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
                                 <el-form-item label="邮箱" prop="mail">
-                                    <el-input v-model="commentForm.mail"></el-input>
+                                    <el-input :disabled="blogInfo.commented === 0" v-model="commentForm.mail"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
                                 <el-form-item label="主页" prop="homePage">
-                                    <el-input v-model="commentForm.homePage"></el-input>
+                                    <el-input :disabled="blogInfo.commented === 0" v-model="commentForm.homePage"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="评论" prop="content">
-                                    <el-input type="textarea" maxlength="200" show-word-limit v-model="commentForm.content" placeholder="说点什么..."></el-input>
+                                    <el-input type="textarea" :disabled="blogInfo.commented === 0" maxlength="200" show-word-limit v-model="commentForm.content" placeholder="说点什么..."></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="8" :offset="16">
                                 <div class="btn-group"  style="float: right">
-                                    <el-button type="text" size="small" round @click="resetForm('commentForm')">重置</el-button>
-                                    <el-button type="primary" size="small" round @click="submitForm('commentForm')">发表评论</el-button>
+                                    <el-button type="text" size="small" :disabled="blogInfo.commented === 0" round @click="resetForm('commentForm')">重置</el-button>
+                                    <el-button type="primary" size="small" :disabled="blogInfo.commented === 0" round @click="submitComment('commentForm')">发表评论</el-button>
                                 </div>
                             </el-col>
                         </el-row>
                     </el-form>
                 </div>
             </div>
-            <div class="comment-area">
-                <div class="comment-list">
-                    <div class="comment-item" v-for="(commentItem, commentIndex) in commentList" :key="commentIndex">
-                        <div class="comment-item-inner">
-                            <div class="comment-item-avatar">
-                                <el-avatar size="medium" :src="commentItem.srcAvatar"></el-avatar>
-                            </div>
-                            <div class="comment-item-body">
-                                <span>
-                                    <span class="comment-item-user">{{commentItem.srcNickname}}</span>
-                                    :&nbsp;
-                                    <span class="comment-item-content">{{commentItem.content}}</span>
-                                    <span class="comment-item-date">{{dateFormat(commentItem.ctime)}}</span>
-                                    <span class="comment-item-reply">
-                                        <el-button type="text" @click="backComment(commentItem)">回复</el-button>
-                                    </span>
-                                </span>
-                            </div>
-                            
-                        </div>
-                        <div class="reply-list">
-                            <div class="reply-item" v-for="(replyItem, replyIndex) in commentItem.replyEntityList" :key="replyIndex">
-                                <div class="reply-item-avatar">
-                                    <el-avatar size="medium" :src="replyItem.srcAvatar"></el-avatar>
+            <div v-if="blogInfo.commented === 1" class="comment-area">
+                <div class="title">评论区</div>
+                <div v-if="commentList.length > 0">
+                    <div class="comment-list">
+                        <div class="comment-item" v-for="(commentItem, commentIndex) in commentList" :key="commentIndex">
+                            <div class="comment-item-inner">
+                                <div class="comment-item-avatar">
+                                    <el-avatar size="medium" :src="commentItem.srcAvatarPath.startsWith('http')?commentItem.srcAvatarPath : sourceUrlPrefix + commentItem.srcAvatarPath"></el-avatar>
                                 </div>
-                                <div class="reply-item-body">
+                                <div class="comment-item-body">
                                     <span>
-                                        <span class="reply-item-user-src">
-                                            {{replyItem.srcNickname}}
-                                        </span>
-                                        <span class="reply-item-keyword">
-                                            回复
-                                        </span>
-                                        <span class="reply-item-user-to">
-                                            {{replyItem.targetNickname}}
-                                        </span>
+                                        <span class="comment-item-user">{{commentItem.srcNickname}}</span>
                                         :&nbsp;
-                                        <span class="reply-item-content">{{replyItem.content}}</span>
-                                        <span class="reply-item-date">{{dateFormat(replyItem.ctime)}}</span>
-                                        <span class="reply-item-reply">
-                                            <el-button type="text" @click="backComment(replyItem)">回复</el-button>
+                                        <span class="comment-item-content">{{commentItem.content}}</span>
+                                        <span class="comment-item-date">{{dateFormat(commentItem.ctime)}}</span>
+                                        <span class="comment-item-reply">
+                                            <el-button type="text" @click="backComment(commentIndex, commentItem.commentId, commentItem.srcId)">回复</el-button>
                                         </span>
                                     </span>
+                                </div>
+                            </div>
+                            <div class="reply-group" v-if="currentCommentIndex === commentIndex" :key="commentIndex">
+                                <div class="reply-avatar">
+                                    <el-avatar v-if="customInfo.avatarPath" shape="square" :size="120" :src="customInfo.customType === 1?(sourceUrlPrefix + customInfo.avatarPath):customInfo.avatarPath"></el-avatar>
+                                </div>
+                                <div class="reply-form">
+                                    <el-form ref="replyForm" :rules="rules" :model="replyForm" label-width="60px">
+                                        <el-form-item v-show="false" label="文章id" prop="blogId">
+                                            <el-input type="text" v-model="replyForm.blogId" autocomplete="off"></el-input>
+                                        </el-form-item>
+                                        <el-form-item v-show="false" label="被回复者id" prop="targetId">
+                                            <el-input type="text" v-model="replyForm.targetId" autocomplete="off"></el-input>
+                                        </el-form-item>
+                                        <el-form-item v-show="false" label="评论者id" prop="srcId">
+                                            <el-input type="text" v-model="replyForm.srcId" autocomplete="off"></el-input>
+                                        </el-form-item>
+                                        <el-row>
+                                            <el-col :span="8">
+                                                <el-form-item label="昵称" prop="nickname">
+                                                    <el-input v-model="replyForm.nickname"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="8">
+                                                <el-form-item label="邮箱" prop="mail">
+                                                    <el-input v-model="replyForm.mail"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                            <el-col :span="8">
+                                                <el-form-item label="主页" prop="homePage">
+                                                    <el-input v-model="replyForm.homePage"></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col :span="24">
+                                                <el-form-item label="评论" prop="content">
+                                                    <el-input type="textarea" maxlength="200" show-word-limit v-model="replyForm.content" placeholder="说点什么..."></el-input>
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col :span="8" :offset="16">
+                                                <div class="btn-group"  style="float: right">
+                                                    <el-button type="text" size="small" round @click="resetReplyForm('replyForm')">取消</el-button>
+                                                    <el-button type="primary" size="small" round @click="submitReply('replyForm')">发表评论</el-button>
+                                                </div>
+                                            </el-col>
+                                        </el-row>
+                                    </el-form>
+                                </div>
+                            </div>
+                            <div class="reply-list">
+                                <div v-for="(replyItem, replyIndex) in commentItem.replyEntityList" :key="replyIndex">
+                                    <div class="reply-item">
+                                        <div class="reply-item-avatar">
+                                            <el-avatar size="medium" :src="replyItem.srcAvatarPath.startsWith('http')?replyItem.srcAvatarPath : sourceUrlPrefix + replyItem.srcAvatarPath"></el-avatar>
+                                        </div>
+                                        <div class="reply-item-body">
+                                            <span>
+                                                <span class="reply-item-user-src">
+                                                    {{replyItem.srcNickname}}
+                                                </span>
+                                                <span class="reply-item-keyword">
+                                                    回复
+                                                </span>
+                                                <span class="reply-item-user-to">
+                                                    {{replyItem.targetNickname}}
+                                                </span>
+                                                :&nbsp;
+                                                <span class="reply-item-content">{{replyItem.content}}</span>
+                                                <span class="reply-item-date">{{dateFormat(replyItem.ctime)}}</span>
+                                                <span class="reply-item-reply">
+                                                    <el-button type="text" @click="backComment(commentIndex + '' + replyIndex, commentItem.commentId, replyItem.srcId)">回复</el-button>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="reply-group" v-if="currentCommentIndex === commentIndex + '' + replyIndex" :key="commentIndex + '' + replyIndex">
+                                        <div class="reply-avatar">
+                                            <el-avatar v-if="customInfo.avatarPath" shape="square" :size="120" :src="customInfo.customType === 1?(sourceUrlPrefix + customInfo.avatarPath):customInfo.avatarPath"></el-avatar>
+                                        </div>
+                                        <div class="reply-form">
+                                            <el-form ref="replyForm" :rules="rules" :model="replyForm" label-width="60px">
+                                                <el-form-item v-show="false" label="文章id" prop="blogId">
+                                                    <el-input type="text" v-model="replyForm.blogId" autocomplete="off"></el-input>
+                                                </el-form-item>
+                                                <el-form-item v-show="false" label="被回复者id" prop="targetId">
+                                                    <el-input type="text" v-model="replyForm.targetId" autocomplete="off"></el-input>
+                                                </el-form-item>
+                                                <el-form-item v-show="false" label="评论者id" prop="srcId">
+                                                    <el-input type="text" v-model="replyForm.srcId" autocomplete="off"></el-input>
+                                                </el-form-item>
+                                                <el-row>
+                                                    <el-col :span="8">
+                                                        <el-form-item label="昵称" prop="nickname">
+                                                            <el-input v-model="replyForm.nickname"></el-input>
+                                                        </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="8">
+                                                        <el-form-item label="邮箱" prop="mail">
+                                                            <el-input v-model="replyForm.mail"></el-input>
+                                                        </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="8">
+                                                        <el-form-item label="主页" prop="homePage">
+                                                            <el-input v-model="replyForm.homePage"></el-input>
+                                                        </el-form-item>
+                                                    </el-col>
+                                                </el-row>
+                                                <el-row>
+                                                    <el-col :span="24">
+                                                        <el-form-item label="评论" prop="content">
+                                                            <el-input type="textarea" maxlength="200" show-word-limit v-model="replyForm.content" placeholder="说点什么..."></el-input>
+                                                        </el-form-item>
+                                                    </el-col>
+                                                </el-row>
+                                                <el-row>
+                                                    <el-col :span="8" :offset="16">
+                                                        <div class="btn-group"  style="float: right">
+                                                            <el-button type="text" size="small" round @click="resetReplyForm('replyForm')">取消</el-button>
+                                                            <el-button type="primary" size="small" round @click="submitReply('replyForm')">发表评论</el-button>
+                                                        </div>
+                                                    </el-col>
+                                                </el-row>
+                                            </el-form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="comment-page">
+                        <el-pagination
+                            small
+                            layout="prev, pager, next"
+                            @current-change="toPage"
+                            @prev-click="toPage"
+                            @next-click="toPage"
+                            :total="total"
+                            :page-size="pageSize">
+                        </el-pagination>
+                    </div>
                 </div>
-                <div class="comment-page">
-                    <el-pagination
-                        small
-                        layout="prev, pager, next"
-                        :total="50">
-                    </el-pagination>
-                </div>
+                <el-empty v-else description="暂无评论"></el-empty>
+            </div>
+            <div v-else class="comment-area">
+                <el-empty :image="require('../../assets/disable.png')" description="评论已关闭"></el-empty>
             </div>
         </div>
     </div>
@@ -126,11 +238,14 @@ export default {
                 classifyEntity: {},
                 labelList: []
             },
+            customInfo: {},
+            currentCommentIndex: -1,
             commentForm: {},
+            replyForm: {},
             rules: {
                 nickname: [
                     { required: true, message: '请输入昵称', trigger: 'blur' },
-                    { max: 8, min: 2, message: '长度在2~8之间', trigger: 'blur' }
+                    { max: 16, min: 2, message: '长度在2~16之间', trigger: 'blur' }
                 ],
                 mail: [
                     { required: true, message: '请输入邮箱地址', trigger: 'blur' },
@@ -140,23 +255,9 @@ export default {
                     { required: true, message: '请输入评论内容', trigger: 'blur' }
                 ]
             },
-            commentList: [
-                {
-                    srcAvatar: require('../../assets/avatar.jpg'),
-                    srcNickname: '一枝红杏出墙来',
-                    content: '在正式绘制边框前，我们先认识一下CSS3 border-image-slice 属性，它可以将border-image-source获取的边框背景图片切割为9份。',
-                    ctime: new Date(),
-                    replyEntityList: [
-                        {
-                            srcAvatar: require('../../assets/avatar.jpg'),
-                            srcNickname: '陈二狗',
-                            targetNickname: '一枝红杏出墙来',
-                            content: '在正式绘制边框前，我们先认识一下CSS3 border-image-slice 属性，它可以将border-image-source获取的边框背景图片切割为9份。',
-                            ctime: new Date(),
-                        }
-                    ]
-                }
-            ]
+            commentList: [],
+            total: 0,
+            pageSize: 10
         }
     },
     mounted() {
@@ -164,8 +265,9 @@ export default {
             let param = {
                 blogId: this.$route.query.blogId
             }
-            this.loadBlogInfo(param);
+            this.loadBlogInfo(param)
             this.loadCustomInfo()
+            this.toPage(1)
         } else {
             this.$router.push('/portal/home')
         }
@@ -177,10 +279,17 @@ export default {
                     this.customInfo = res.data
                     if (res.data) {
                         this.commentForm = {
-                            avatarPath: res.data.avatarPath,
                             nickname: res.data.nickname,
                             mail: res.data.mail,
                             homePage: res.data.homePage,
+                            srcId: res.data.customId
+                            
+                        }
+                        this.replyForm = {
+                            nickname: res.data.nickname,
+                            mail: res.data.mail,
+                            homePage: res.data.homePage,
+                            srcId: res.data.customId
                         }
                     }
                     
@@ -218,11 +327,85 @@ export default {
                 }
             })
         },
-        submitForm(formName) {
-
+        loadCommentList(param) {
+            $get("/comment/findByPage", param).then(res=>{
+                if(res.code === 100) {
+                    this.commentList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        toPage(pageNum) {
+            let param = {
+                pageNum: pageNum, 
+                pageSize: this.pageSize,
+                blogId: this.$route.query.blogId
+            }
+            this.loadCommentList(param)
+        },
+        backComment(index, commentId, targetId) {
+            console.log("index:" + index + "commentId: " + commentId + "targetId: " + targetId)
+            this.$set(this.replyForm, 'commentId', commentId)
+            this.$set(this.replyForm, 'targetId', targetId)
+            this.currentCommentIndex = index
+        },
+        submitComment(formName) {
+            this.$refs[formName].validate((valid) => {
+                if(valid) {
+                    this.$set(this.commentForm, "blogId", this.blogInfo.blogId)
+                    $post('/comment/save', this.commentForm).then(res=>{
+                        if(res.code === 100) {
+                            this.resetCommentForm(formName)
+                            this.loadCustomInfo()
+                            // 加载评论列表
+                            this.toPage(1)
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("发表失败!")
+                    })
+                } else {
+                    return false
+                }
+            });
+        },
+        submitReply(formName) {
+            console.log("formName:", formName)
+            this.$refs[formName][0].validate((valid) => {
+                if(valid) {
+                    this.$set(this.replyForm, "blogId", this.blogInfo.blogId)
+                    $post('/comment/save', this.replyForm).then(res=>{
+                        if(res.code === 100) {
+                            this.resetReplyForm(formName)
+                            this.loadCustomInfo()
+                            // 加载评论列表
+                            this.toPage(1)
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("发表失败!")
+                    })
+                } else {
+                    return false
+                }
+            });
+        },
+        resetCommentForm(formName) {
+            this.$delete(this.commentForm, 'content')
+            console.log("commentForm: ", JSON.stringify(this.commentForm))
+        },
+        resetReplyForm(formName) {
+            this.currentCommentIndex = -1
+            this.$delete(this.replyForm, 'content')
+            this.$delete(this.replyForm, 'targetId')
+            this.$delete(this.replyForm, 'commentId')
+            console.log("replyForm: ", JSON.stringify(this.replyForm))
         },
         dateFormat(date) {
             return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")

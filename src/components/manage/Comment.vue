@@ -1,14 +1,94 @@
 <template>
     <div class="comment-main">
+        <el-dialog
+            title="回复列表"
+            :visible.sync="replyListDialogShow"
+            style="padding-bottom: 20px"
+            @close="replyList = []"
+            width="80%">
+            <div class="reply-dialog">
+                <div class="reply-table">
+                    <el-table
+                        :data="replyList"
+                        style="width: 100%;margin-bottom: 20px;">
+                        <el-table-column
+                            prop="srcNickname"
+                            label="回复者昵称"
+                            sortable
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            prop="srcMail"
+                            label="回复者邮箱">
+                        </el-table-column>
+                        <el-table-column
+                            prop="targetNickname"
+                            label="被回复者昵称"
+                            sortable
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            prop="targetMail"
+                            label="被回复者邮箱">
+                        </el-table-column>
+                        <el-table-column
+                            prop="content"
+                            show-overflow-tooltip
+                            label="内容">
+                        </el-table-column>
+                        <el-table-column
+                            prop="ctime"
+                            :formatter="dateFormat"
+                            label="评论日期">
+                        </el-table-column>
+                        <el-table-column
+                            prop="srcIp"
+                            label="IP">
+                        </el-table-column>
+                        <el-table-column
+                            label="操作"
+                            align="center">
+                            <template slot-scope="scope">
+                                <div v-if="currentReplyId !== scope.row.replyId">
+                                    <el-button
+                                        size="mini"
+                                        type="text"
+                                        @click="showReplyInnerInput(scope.row)">回复</el-button>
+                                    <el-button
+                                        size="mini"
+                                        type="danger"
+                                        @click="deleteComment(scope.row)">删除</el-button>
+                                </div>
+                                <div v-else>
+                                    <el-input size="small" style="width: 60%" v-model="content" @keyup.enter.native="reply(scope.row)"></el-input>
+                                    <el-button size="mini" type="text" @click="cancelReply">取消</el-button>
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div class="reply-page">
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        @current-change="toPage"
+                        @prev-click="toPage"
+                        @next-click="toPage"
+                        :page-size="pageSize"
+                        :total="total">
+                    </el-pagination>
+                </div>
+            </div>
+        </el-dialog>
+
+
         <el-tabs type="border-card" @tab-click="switchTab">
             <el-tab-pane label="文章">
                 <div class="essay-body">
-                    <div class="coment-table">
+                    <div class="comment-table">
                         <el-table
                             :data="commentList"
-                            style="width: 100%;margin-bottom: 20px;"
-                            row-key="commentId"
-                            :tree-props="{children: 'replyList', hasChildren: 'hasChildren'}">
+                            style="width: 100%;margin-bottom: 20px;">
                             <el-table-column
                                 prop="srcNickname"
                                 label="昵称"
@@ -41,10 +121,13 @@
                                         <el-button
                                             size="mini"
                                             type="text"
-                                            @click="showReply(scope.row)">回复</el-button>
+                                            @click="showReplyInput(scope.row)">回复</el-button>
                                         <el-button
                                             size="mini"
-                                            type="text"
+                                            @click="showReplyList(scope.row)">回复列表</el-button>
+                                        <el-button
+                                            size="mini"
+                                            type="danger"
                                             @click="deleteComment(scope.row)">删除</el-button>
                                     </div>
                                     <div v-else>
@@ -106,7 +189,10 @@
                                         <el-button
                                             size="mini"
                                             type="text"
-                                            @click="showReply(scope.row)">回复</el-button>
+                                            @click="showReplyInput(scope.row)">回复</el-button>
+                                        <el-button
+                                            size="mini"
+                                            @click="showReplyList(scope.row)">回复列表</el-button>
                                         <el-button
                                             size="mini"
                                             type="text"
@@ -147,7 +233,10 @@ export default {
             pageSize: 10,
             total: 0,
             currentCommentId: null,
-            content: ''
+            currentReplyId: null,
+            content: '',
+            replyList: [],
+            replyListDialogShow: false,
         }
     },
     mounted() {
@@ -179,12 +268,16 @@ export default {
             this.type = tab.index
             this.toPage(1)
         },
-        showReply(row) {
+        showReplyInput(row) {
             this.currentCommentId = row.commentId
+        },
+        showReplyInnerInput(row) {
+            this.currentReplyId = row.replyId
         },
         cancelReply() {
             this.content = ''
             this.currentCommentId = null
+            this.currentReplyId = null
         },
         reply(row) {
             let param = {
@@ -193,10 +286,10 @@ export default {
                 commentId: row.commentId,
                 blogId: row.blogId
             }
-            console.log("回复参数:", JSON.stringify(param))
             $post('/reply/save', param).then(res=>{
                 if(res.code === 100) {
                     // 加载评论列表
+                    this.$message.success(res.msg)
                     this.cancelReply()
                     this.toPage(1)
                 } else {
@@ -205,6 +298,10 @@ export default {
             }).catch(error => {
                 this.$message.error("发表失败!")
             })
+        },
+        showReplyList(row) {
+            this.replyList = row.replyEntityList
+            this.replyListDialogShow = true
         },
         dateFormat(row, column, cellValue){
             return this.$moment(cellValue).format("YYYY-MM-DD HH:mm:ss")
@@ -218,5 +315,11 @@ export default {
         .comment-page {
             float: right;
         }
+        .reply-dialog {
+            padding-bottom: 40px;
+            .reply-page {
+                float: right;
+            }
+        }   
     }
 </style>

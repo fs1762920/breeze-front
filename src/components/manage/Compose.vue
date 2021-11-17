@@ -51,7 +51,7 @@
                         :headers="header"
                         :show-file-list="false"
                         :on-success="uploadCoverSuccess">
-                        <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar" :key="blogInfo.cover">
+                        <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
@@ -124,7 +124,8 @@ export default {
             blogInfo: {
                 labelIds: [],
                 commented: 1,
-                topped: 0
+                topped: 0,
+                cover: null
             },
             essaySettingShow: false,
             labelList: [],

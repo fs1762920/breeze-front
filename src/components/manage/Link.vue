@@ -22,7 +22,7 @@
                     <el-input type="textarea" v-model="friendInfo.personalSign" :rows="3" :maxlength="50" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="addOrEditClassify('friendForm')">提交</el-button>
+                    <el-button type="primary" @click="save('friendForm')">提交</el-button>
                     <el-button @click="resetForm('friendForm')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -121,22 +121,7 @@ export default {
             friendFormShow: false,
             friendInfo: {},
             rules: {},
-            friendList: [
-                {
-                    friendId: 1,
-                    nickname: '张三的歌',
-                    avatarPath: 'http://localhost:8080/upload/file/3475212308431&341.jpeg',
-                    personalSign: '年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。',
-                    homePage: 'http://localhost:8080/portal'
-                },
-                {
-                    friendId: 2,
-                    nickname: '最熟悉的陌生人',
-                    avatarPath: 'http://localhost:8080/upload/file/3475212308431&341.jpeg',
-                    personalSign: '年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。',
-                    homePage: 'http://localhost:8080/portal'
-                }
-            ],
+            friendList: [],
             total: 0
         }
     },
@@ -146,12 +131,12 @@ export default {
     methods: {
         loadData(param) {
             $get('/friend/findByPage', param).then(res=>{
-                // if(res.code === 100) {
-                //     this.friendList = res.data.list
-                //     this.total = res.data.total
-                // } else {
-                //     this.$message.error(res.msg)
-                // }
+                if(res.code === 100) {
+                    this.friendList = res.data.list
+                    this.total = res.data.total
+                } else {
+                    this.$message.error(res.msg)
+                }
             }).catch(error => {
                 this.$message.error("无法连接到服务器")
             })
@@ -167,14 +152,14 @@ export default {
             this.friendInfo = friendInfo
             this.friendFormShow = true
         },
-        addOrEditClassify(formName) {
+        save(formName) {
             let url;
             if(this.friendInfo.friendId) {
                 url = '/friend/update'
             } else {
                 url = '/friend/save'
             }
-            $post(url, param).then(res=>{
+            $post(url, this.friendInfo).then(res=>{
                 if(res.code === 100) {
                     this.$message.success(res.msg)
                     this.friendFormShow = false

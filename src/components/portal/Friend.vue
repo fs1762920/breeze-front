@@ -3,98 +3,23 @@
         <div class="header">
             <div class="title">友情链接</div>
         </div>
-        <div class="friend-group">
-            <div class="friend-item">
+        <div v-if="friendList.length > 0" class="friend-group">
+            <div class="friend-item" v-for="(item, index) in friendList" :key="index">
                 <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
+                    <el-avatar :size="60" :src="item.avatarPath"></el-avatar>
                 </div>
                 <div class="info">
                     <div class="nickname">
-                        星河漫步-xinac.com
+                        {{item.nickname}}
                     </div>
                     <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
+                        {{item.personalSign}}
                     </div>
                 </div>
             </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
-            <div class="friend-item">
-                <div class="avatar">
-                    <el-avatar :size="60" :src="require('../../assets/avatar.jpg')"></el-avatar>
-                </div>
-                <div class="info">
-                    <div class="nickname">
-                        星河漫步-xinac.com
-                    </div>
-                    <div class="sign">
-                        年龄永远不是衡量一个人的刻度，只有责任的叠加才会让人逐渐成长。
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div v-else class="friend-group">
+            <el-empty description="暂无友链加入"></el-empty>
         </div>
         <div class="friend-note">
             <div class="friend-note-item">
@@ -118,10 +43,28 @@
     </div>
 </template>
 <script>
+import {$get, $post} from '../../api/RestUtils'
+
 export default {
     data() {
         return {
             friendList: []
+        }
+    },
+    mounted() {
+
+    },
+    methods: {
+        loadFriendList() {
+            $get("/friend/find", null).then(res=>{
+                if(res.code === 100) {
+                    this.friendList = res.data
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器!")
+            })
         }
     }
 }

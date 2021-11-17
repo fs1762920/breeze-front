@@ -57,7 +57,7 @@
                                     <el-button
                                         size="mini"
                                         type="danger"
-                                        @click="deleteComment(scope.row)">删除</el-button>
+                                        @click="deleteReply(scope.row)">删除</el-button>
                                 </div>
                                 <div v-else>
                                     <el-input size="small" style="width: 60%" v-model="content" @keyup.enter.native="reply(scope.row)"></el-input>
@@ -302,6 +302,37 @@ export default {
         showReplyList(row) {
             this.replyList = row.replyEntityList
             this.replyListDialogShow = true
+        },
+        deleteComment(row) {
+            let param = {
+                commentId: row.commentId
+            }
+            $get('/comment/delete', param).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                    this.toPage(1)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("发表失败!")
+            })
+        },
+        deleteReply(row) {
+            let param = {
+                replyId: row.replyId
+            }
+            $get('/reply/delete', param).then(res=>{
+                if(res.code === 100) {
+                    this.$message.success(res.msg)
+                    this.replyListDialogShow = false
+                    this.toPage(1)
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("发表失败!")
+            })
         },
         dateFormat(row, column, cellValue){
             return this.$moment(cellValue).format("YYYY-MM-DD HH:mm:ss")

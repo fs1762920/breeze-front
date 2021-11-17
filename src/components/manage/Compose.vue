@@ -51,13 +51,13 @@
                         :headers="header"
                         :show-file-list="false"
                         :on-success="uploadCoverSuccess">
-                        <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar">
+                        <img v-if="blogInfo.cover" :src="sourceUrlPrefix + blogInfo.cover" class="avatar" :key="blogInfo.cover">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" style="float: right; margin-left: 10px" @click="publish">发 布</el-button>
-                    <el-button type="danger" style="float: right" :disabled="this.$route.params && this.$route.params.blogId" @click="save">保存草稿</el-button>
+                    <el-button type="danger" style="float: right" :disabled="this.$route.params && this.$route.params.blogId >= -1" @click="save">保存草稿</el-button>
                 </el-form-item>
             </el-form>
         </el-drawer>

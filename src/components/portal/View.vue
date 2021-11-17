@@ -348,7 +348,6 @@ export default {
             this.loadCommentList(param)
         },
         backComment(index, commentId, targetId) {
-            console.log("index:" + index + "commentId: " + commentId + "targetId: " + targetId)
             this.$set(this.replyForm, 'commentId', commentId)
             this.$set(this.replyForm, 'targetId', targetId)
             this.currentCommentIndex = index

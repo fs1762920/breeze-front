@@ -291,6 +291,7 @@ export default {
                 font-weight: 600;
             }
             .content {
+                width: calc(100% - 60px);
                 padding-left: 20px;
                 word-wrap: break-word;
                 word-break: break-all;

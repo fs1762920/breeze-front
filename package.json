@@ -13,6 +13,7 @@
     "@growthbunker/vuetimeline": "^0.1.17",
     "@multiavatar/multiavatar": "^1.0.6",
     "axios": "^0.21.1",
+    "clipboard": "^2.0.8",
     "echarts": "^4.9.0",
     "element-ui": "^2.15.1",
     "hls.js": "^0.14.17",

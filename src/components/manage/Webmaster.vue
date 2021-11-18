@@ -66,6 +66,9 @@
                                 <el-form-item label="电子邮箱" prop="mail">
                                     <el-input v-model="userInfo.mail"></el-input>
                                 </el-form-item>
+                                <el-form-item label="github" prop="github">
+                                    <el-input v-model="userInfo.github"></el-input>
+                                </el-form-item>
                                 <el-form-item label="个人主页" prop="homePath">
                                     <el-input v-model="userInfo.homePath"></el-input>
                                 </el-form-item>
@@ -136,6 +139,9 @@ export default {
                     { required: true, message: '请输入邮箱', trigger: 'blur'},
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
                 ],
+                github: [
+                    { required: true, message: '请输入github地址', trigger: 'blur'}
+                ],
                 homePath: [
                     { required: true, message: '请输入个人主页', trigger: 'blur'}
                 ]
@@ -170,6 +176,7 @@ export default {
                         username: res.data.username,
                         nickname: res.data.nickname,
                         mail: res.data.mail,
+                        github: res.data.github,
                         homePath: res.data.homePath,
                         personalSign: res.data.personalSign,
                         avatar: res.data.avatar

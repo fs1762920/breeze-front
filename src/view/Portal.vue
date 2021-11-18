@@ -1,5 +1,28 @@
 <template>
     <el-container>
+        <el-dialog
+            title="友链信息"
+            :visible.sync="linkInfoShow"
+            width="30%">
+            <div class="link-info">
+                <div class="link-info-item">
+                    <div class="label">博客名称:</div>
+                    <div class="content">Breeze&nbsp;<i class="copy-icon el-icon-document" data-clipboard-text="Breeze" @click="copy"></i></div>
+                </div>
+                <div class="link-info-item">
+                    <div class="label">头像链接:</div>
+                    <div class="content">{{sourceUrlPrefix + userInfo.avatar}}&nbsp;<i class="copy-icon el-icon-document" :data-clipboard-text="sourceUrlPrefix + userInfo.avatar" @click="copy"></i></div>
+                </div>
+                <div class="link-info-item">
+                    <div class="label">博客主页:</div>
+                    <div class="content">{{userInfo.homePath}}&nbsp;<i class="copy-icon el-icon-document" :data-clipboard-text="userInfo.homePath" @click="copy"></i></div>
+                </div>
+                <div class="link-info-item">
+                    <div class="label">个性签名:</div>
+                    <div class="content">{{userInfo.personalSign}}&nbsp;<i class="copy-icon el-icon-document" :data-clipboard-text="userInfo.personalSign" @click="copy"></i></div>
+                </div>
+            </div>
+        </el-dialog>
         <el-header>
             <div class="head">
                 <div class="nav">
@@ -46,11 +69,11 @@
                         </div>
                     </div>
                     <div class="focus">
-                        <el-button type="primary" round>关注我</el-button>
+                        <el-button type="primary" round @click="followMe()">关注我</el-button>
                     </div>
                     <div class="contact-group">
                         <div class="contact-item">
-                            <i class="iconfont icon-github"></i>
+                            <i class="iconfont icon-github" @click="toOuterLink(userInfo.github)"></i>
                         </div>
                         <div class="contact-item">
                             <i class="iconfont icon-qq"></i>
@@ -111,7 +134,8 @@ export default {
             websiteInfo: {},
             labelList: [],
             classifyList: [],
-            latestBlogList: []
+            latestBlogList: [],
+            linkInfoShow: false
         }
     },
     mounted() {
@@ -168,6 +192,7 @@ export default {
                         username: res.data.username,
                         nickname: res.data.nickname,
                         mail: res.data.mail,
+                        github: res.data.github,
                         homePath: res.data.homePath,
                         personalSign: res.data.personalSign,
                         avatar: res.data.avatar
@@ -223,6 +248,24 @@ export default {
                 this.$message.error("无法连接到服务器!")
             })
         },
+        followMe() {
+            this.linkInfoShow = true
+        },
+        copy: function() {
+            // let clipboard = new Clipboard(".copy-icon"); //单页面引用
+            let clipboard = new this.Clipboard(".copy-icon"); //在main.js中引用
+            clipboard.on("success", e => {
+                this.$message.success("复制成功")
+                // 释放内存
+                clipboard.destroy();
+            });
+            clipboard.on("error", e => {
+                // 不支持复制
+                this.$message.error("该浏览器不支持自动复制")
+                // 释放内存
+                clipboard.destroy();
+            });
+        }, 　　
         toDispatch(url) {
             this.$router.push(url)
             window.scrollTo(0, 0)
@@ -238,6 +281,26 @@ export default {
 
 </script>
 <style lang="less" scoped>
+    .link-info {
+        padding: 20px;
+        .link-info-item {
+            line-height: 40px;
+            display: flex;
+            .label {
+                width: 64px;
+                font-weight: 600;
+            }
+            .content {
+                padding-left: 20px;
+                word-wrap: break-word;
+                word-break: break-all;
+                overflow: hidden;
+                i {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
     .head{
         padding: 0 20vw 0 20vw;
         display: flex;

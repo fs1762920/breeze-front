@@ -13,6 +13,7 @@ import 'mavon-editor/dist/css/index.css'
 import JsonViewer from 'vue-json-viewer'
 import moment from 'moment'
 import './assets/iconfont/iconfont.css'
+import Clipboard from 'clipboard';
 
 
 Vue.config.productionTip = false;
@@ -23,6 +24,7 @@ Vue.use(vuetimeline);
 Vue.use(JsonViewer);
 
 Vue.prototype.$moment = moment;
+Vue.prototype.Clipboard=Clipboard;
 
 /* eslint-disable no-new */
 new Vue({

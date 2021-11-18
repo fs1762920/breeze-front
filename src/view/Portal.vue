@@ -251,7 +251,7 @@ export default {
         followMe() {
             this.linkInfoShow = true
         },
-        copy: function() {
+        copy() {
             // let clipboard = new Clipboard(".copy-icon"); //单页面引用
             let clipboard = new this.Clipboard(".copy-icon"); //在main.js中引用
             clipboard.on("success", e => {

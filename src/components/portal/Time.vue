@@ -48,7 +48,7 @@ export default {
         loadData(param) {
             $get("/blog/findByPage", param).then(res=>{
                 if(res.code === 100) {
-                    this.blogList = res.data.list
+                    this.blogList = this.blogList.concat(res.data.list)
                     this.total = res.data.total
                     this.hasNextPage = res.data.hasNextPage
                 } else {

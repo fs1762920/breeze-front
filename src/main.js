@@ -24,7 +24,6 @@ Vue.use(mavonEditor);
 Vue.use(vuetimeline);
 Vue.use(JsonViewer);
 Vue.use(APlayer, {
-  defaultCover: 'https://github.com/u3u.png', // set the default cover
   productionTip: false, // disable console output
 });
 

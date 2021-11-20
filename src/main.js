@@ -14,6 +14,7 @@ import JsonViewer from 'vue-json-viewer'
 import moment from 'moment'
 import './assets/iconfont/iconfont.css'
 import Clipboard from 'clipboard';
+import APlayer from '@moefe/vue-aplayer';
 
 
 Vue.config.productionTip = false;
@@ -22,6 +23,10 @@ Vue.use(ElementUI);
 Vue.use(mavonEditor);
 Vue.use(vuetimeline);
 Vue.use(JsonViewer);
+Vue.use(APlayer, {
+  defaultCover: 'https://github.com/u3u.png', // set the default cover
+  productionTip: false, // disable console output
+});
 
 Vue.prototype.$moment = moment;
 Vue.prototype.Clipboard=Clipboard;

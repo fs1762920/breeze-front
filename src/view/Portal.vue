@@ -1,6 +1,17 @@
 <template>
     <el-container>
         <el-backtop></el-backtop>
+        <div class="music-group">
+            <aplayer
+                v-if="musicLoaded"
+                ref="player"
+                :fixed="true"
+                :volume="0.3"
+                :audio="musicList"
+                :lrcType="1"
+                :listFolded="true"
+                />
+        </div>
         <el-dialog
             title="友链信息"
             :visible.sync="linkInfoShow"
@@ -136,6 +147,8 @@ export default {
             labelList: [],
             classifyList: [],
             latestBlogList: [],
+            musicList: [],
+            musicLoaded: false,
             linkInfoShow: false
         }
     },
@@ -150,6 +163,7 @@ export default {
         } else {
             this.$router.replace('/portal/home')
         }
+        this.loadMusicList()
         this.saveCustomInfo()
     },
     methods: {
@@ -249,6 +263,24 @@ export default {
                 this.$message.error("无法连接到服务器!")
             })
         },
+        loadMusicList(){
+            $get("/music/find", null).then(res=>{
+                if(res.code === 100) {
+                    res.data.forEach(item => {
+                        this.$set(item, 'cover', this.sourceUrlPrefix + item.albumPicture)
+                        this.$set(item, 'url', this.sourceUrlPrefix + item.src)
+                        this.$set(item, 'lrc', item.lyric)
+                        this.$set(item, 'name', item.title)
+                    })
+                    this.musicList = res.data
+                    this.musicLoaded = true
+                } else {
+                    this.$message(res.msg)
+                }
+            }).catch(error => {
+                this.$message.error("无法连接到服务器")
+            });
+        },
         followMe() {
             this.linkInfoShow = true
         },
@@ -282,6 +314,18 @@ export default {
 
 </script>
 <style lang="less" scoped>
+    .music-group {
+        position: fixed;
+        bottom: 2vh;
+        width: 16vw;
+        z-index: 2048;
+        left: 2vw;
+        /deep/.aplayer-lrc-contents {
+            .aplayer-lrc-current {
+                color: rgb(126, 126, 255);
+            }
+        }
+    }
     .link-info {
         padding: 20px;
         .link-info-item {

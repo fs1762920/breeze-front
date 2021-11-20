@@ -66,6 +66,10 @@
                     <i class="iconfont icon-icon"></i>
                     <span slot="title">&nbsp;相册</span>
                 </el-menu-item>
+                <el-menu-item index="/manage/music" @click="toDispatch('/manage/music')">
+                    <i class="iconfont icon-yinle"></i>
+                    <span slot="title">&nbsp;音乐</span>
+                </el-menu-item>
                 <el-menu-item index="/manage/comment" @click="toDispatch('/manage/comment')">
                     <i class="iconfont icon-pinglun"></i>
                     <span slot="title">&nbsp;评论</span>

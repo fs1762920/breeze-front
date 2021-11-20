@@ -24,6 +24,7 @@ import Tool from '@/components/manage/Tool'
 import Webmaster from '@/components/manage/Webmaster'
 import Website from '@/components/manage/Website'
 import Link from '@/components/manage/Link'
+import Music from '@/components/manage/Music'
 
 
 Vue.use(Router)
@@ -151,6 +152,11 @@ const router = new Router({
           path: '/manage/link',
           name: 'link',
           component: Link
+        },
+        {
+          path: '/manage/music',
+          name: 'music',
+          component: Music
         }
       ]
     }

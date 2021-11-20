@@ -127,6 +127,7 @@
                     @prev-click="toPage"
                     @next-click="toPage"
                     :total="total"
+                    :current-page="currentPage"
                     :page-size="pageSize">
                 </el-pagination>
             </div>
@@ -143,6 +144,7 @@ export default {
             classifyList: [],
             blogList: [],
             total: 0,
+            currentPage: 1,
             pageSize: 10
         }
     },
@@ -156,6 +158,7 @@ export default {
                 if(res.code === 100) {
                     this.blogList = res.data.list
                     this.total = res.data.total
+                    this.currentPage = res.data.pageNum
                 } else {
                     this.$message.error(res.msg)
                 }

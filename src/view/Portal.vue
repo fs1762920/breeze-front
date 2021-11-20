@@ -1,5 +1,6 @@
 <template>
     <el-container>
+        <el-backtop></el-backtop>
         <el-dialog
             title="友链信息"
             :visible.sync="linkInfoShow"

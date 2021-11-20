@@ -66,6 +66,7 @@
                 @prev-click="toPage"
                 @next-click="toPage"
                 :total="total"
+                :current-page="currentPage"
                 :page-size="pageSize">
             </el-pagination>
         </div>
@@ -82,6 +83,7 @@ export default {
             photoList: [],
             total: 0,
             pageSize: 8,
+            currentPage: 1,
             currentPhotoInfo: {},
             photoIds: [],
             batchOperated: false,
@@ -101,6 +103,7 @@ export default {
                 if(res.code === 100) {
                     this.photoList = res.data.list
                     this.total = res.data.total
+                    this.currentPage = res.data.pageNum
                 } else {
                     this.$message.error(res.msg)
                 }

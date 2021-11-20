@@ -286,7 +286,7 @@ export default {
         },
         copy() {
             // let clipboard = new Clipboard(".copy-icon"); //单页面引用
-            let clipboard = new this.Clipboard(".copy-icon"); //在main.js中引用
+            let clipboard = new ClipboardJS(".copy-icon"); //在main.js中引用
             clipboard.on("success", e => {
                 this.$message.success("复制成功")
                 // 释放内存

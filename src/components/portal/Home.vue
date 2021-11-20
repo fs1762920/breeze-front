@@ -7,7 +7,7 @@
             <div class="cover">
                 <el-image fit="cover" :src="sourceUrlPrefix + item.cover">
                     <div slot="placeholder" class="image-slot">
-                        加载中<span class="dot">...</span>
+                        <i class="el-icon-picture-outline"></i>
                     </div>
                 </el-image>
             </div>

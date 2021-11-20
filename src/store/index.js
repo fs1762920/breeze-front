@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+// import Vue from 'vue'
+// import Vuex from 'vuex'
  
 // 挂在Vuex
 Vue.use(Vuex)

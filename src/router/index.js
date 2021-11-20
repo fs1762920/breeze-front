@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+// import Vue from 'vue'
+// import VueRouter from 'vue-router'
 // import Portal from '@/view/Portal'
 // import Manage from '@/view/Manage'
 // import Init from '@/view/Init'
@@ -27,13 +27,13 @@ import Router from 'vue-router'
 // import Music from '@/components/manage/Music'
 
 
-Vue.use(Router)
-const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+Vue.use(VueRouter)
+// const originalPush = VueRouter.prototype.push
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 
-const router = new Router({
+const router = new VueRouter({
   mode:'history',
   routes: [
     {

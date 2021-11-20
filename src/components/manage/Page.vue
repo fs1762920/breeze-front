@@ -106,13 +106,11 @@ export default {
         },
         //上传图片接口pos 表示第几个图片 
         handleEditorImgAdd(pos , $file){
-            console.log("pos:", pos)
             let formdata = new FormData();
             formdata.append('file' , $file);
             $post('/file/upload', formdata).then(res=>{
                 if(res.code === 100) {
                     let url = this.sourceUrlPrefix + res.data;
-                    console.log("url:", url)
                     this.$refs.md.$img2Url(pos, url);
                 } else {
                     this.$message.error("上传失败,"+res.msg)

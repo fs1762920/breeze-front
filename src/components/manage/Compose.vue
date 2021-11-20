@@ -133,7 +133,6 @@ export default {
         }
     },
     mounted() {
-        console.log("param: ", JSON.stringify(this.$route.params))
         if(this.$route.params && this.$route.params.blogId) {
             this.loadBlogInfo(this.$route.params.blogId)
         }

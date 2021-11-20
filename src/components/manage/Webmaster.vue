@@ -238,7 +238,6 @@ export default {
             });
         },
         uploadAvatarSuccess(res) {
-            console.log("avatar: ", res.data)
             let param = {
                 avatar: res.data
             }

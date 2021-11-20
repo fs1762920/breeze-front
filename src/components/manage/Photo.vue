@@ -99,7 +99,6 @@ export default {
     methods: {
         loadData(param) {
             $get("/photo/findByPage", param).then(res=>{
-                console.log("请求结果: ", res)
                 if(res.code === 100) {
                     this.photoList = res.data.list
                     this.total = res.data.total
@@ -119,7 +118,6 @@ export default {
             this.loadData(param)
         },
         deleteBatch() {
-            console.log(JSON.stringify(this.photoIds))
             let param = {
                 photoIds: this.photoIds
             }
@@ -151,9 +149,7 @@ export default {
             this.selectedFile.push(file.raw)
         },
         handleRemove(file) {
-            console.log("删除前文件数量:"+this.selectedFile.length)
             this.selectedFile.splice(this.fileList.indexOf(file), 1)
-            console.log("删除后文件数量:"+this.selectedFile.length)
         },
         upload() {
             let param = new FormData()

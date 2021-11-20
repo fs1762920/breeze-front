@@ -317,7 +317,6 @@ export default {
             this.loadCommentList(param)
         },
         backComment(index, commentId, targetId) {
-            console.log("index:" + index + "commentId: " + commentId + "targetId: " + targetId)
             this.$set(this.replyForm, 'commentId', commentId)
             this.$set(this.replyForm, 'targetId', targetId)
             this.currentCommentIndex = index
@@ -344,7 +343,6 @@ export default {
             });
         },
         submitReply(formName) {
-            console.log("formName:", formName)
             this.$refs[formName][0].validate((valid) => {
                 if(valid) {
                     this.$set(this.replyForm, "blogId", -1)
@@ -367,14 +365,12 @@ export default {
         },
         resetCommentForm(formName) {
             this.$delete(this.commentForm, 'content')
-            console.log("commentForm: ", JSON.stringify(this.commentForm))
         },
         resetReplyForm(formName) {
             this.currentCommentIndex = -1
             this.$delete(this.replyForm, 'content')
             this.$delete(this.replyForm, 'targetId')
             this.$delete(this.replyForm, 'commentId')
-            console.log("replyForm: ", JSON.stringify(this.replyForm))
         },
         dateFormat(date) {
             return this.$moment(date).format("YYYY-MM-DD HH:mm:ss")

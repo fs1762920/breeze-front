@@ -256,7 +256,6 @@ export default {
             })
         },
         toPage(pageNum) {
-            console.log("type :", this.type)
             let param = {
                 pageNum: pageNum,
                 pageSize: this.pageSize,

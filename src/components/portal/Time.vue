@@ -91,7 +91,10 @@ export default {
                 width: 70%;
             }
             /deep/.gb-vue-timeline-update__thumbnail {
-                border: none!important
+                border: none!important;
+                width: 100%;
+                height: calc(20vw * 0.75);
+                object-fit: cover;
             }
             /deep/.gb-vue-timeline-update__right {
                 width: 20vw;

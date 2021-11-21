@@ -9,7 +9,7 @@ import store from './store/index'
 import 'element-ui/lib/theme-chalk/index.css'
 import vuetimeline from "@growthbunker/vuetimeline"
 import mavonEditor from 'mavon-editor'
-// import 'mavon-editor/dist/css/index.css'
+import 'mavon-editor/dist/css/index.css'
 // import moment from 'moment'
 import './assets/iconfont/iconfont.css'
 // import clipboard from 'clipboard';

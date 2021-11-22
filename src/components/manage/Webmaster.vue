@@ -86,13 +86,13 @@
                         <div class="webmaster-pass" label-width="80px">
                             <el-form ref="passForm" :model="passInfo" :rules="passRules">
                                 <el-form-item label="原密码" prop="oldPass">
-                                    <el-input type="password" v-model="passInfo.oldPass"></el-input>
+                                    <el-input type="password" v-model="passInfo.oldPass" show-password></el-input>
                                 </el-form-item>
                                 <el-form-item label="新密码" prop="newPass">
-                                    <el-input type="password" v-model="passInfo.newPass"></el-input>
+                                    <el-input type="password" v-model="passInfo.newPass" show-password></el-input>
                                 </el-form-item>
                                 <el-form-item label="确认密码" prop="checkPass">
-                                    <el-input type="password" v-model="passInfo.checkPass"></el-input>
+                                    <el-input type="password" v-model="passInfo.checkPass" show-password></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="updatePass('passForm')">保存</el-button>

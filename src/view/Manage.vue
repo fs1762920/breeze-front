@@ -7,13 +7,13 @@
             :visible.sync="show">
             <el-form ref="passForm" :model="passInfo" status-icon :rules="rules">
                 <el-form-item label="旧密码" prop="oldPass" label-width="80px">
-                    <el-input type="password" v-model="passInfo.oldPass"></el-input>
+                    <el-input type="password" v-model="passInfo.oldPass" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="新密码" prop="newPass" label-width="80px">
-                    <el-input type="password" v-model="passInfo.newPass"></el-input>
+                    <el-input type="password" v-model="passInfo.newPass" show-password></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass" label-width="80px">
-                    <el-input type="password" v-model="passInfo.checkPass"></el-input>
+                    <el-input type="password" v-model="passInfo.checkPass" show-password></el-input>
                 </el-form-item>
                 <el-form-item label-width="10vw">
                     <el-button @click="cancelChange('passForm')">取 消</el-button>

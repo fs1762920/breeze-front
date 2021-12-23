@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21376427",
+      "name": "添加表情_fjxjv7",
+      "font_class": "tianjiabiaoqing_fjxjv7",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
       "icon_id": "1029",
       "name": "音乐",
       "font_class": "yinle",

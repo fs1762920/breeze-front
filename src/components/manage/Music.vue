@@ -30,7 +30,7 @@
                         name="file"
                         action=""
                         :data="musicInfo"
-                        accept=".mp3"
+                        accept=".mp3,.flac"
                         :on-change="handleChange"
                         :on-remove="handleRemove"
                         :auto-upload="false"
@@ -43,7 +43,7 @@
                     <el-input v-show="false" v-model="musicInfo.file" type="file" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="save('musicForm')">提交</el-button>
+                    <el-button type="primary" @click="save('musicForm')" :loading="uploading">{{uploading? "上传中" : "提交"}}</el-button>
                     <el-button @click="resetForm('musicForm')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -166,7 +166,8 @@ export default {
             selectedFile: null,
             fileList: [],
             lyricShow: false,
-            currentLyric: ''
+            currentLyric: '',
+            uploading: false
         }
     },
     mounted() {
@@ -205,6 +206,7 @@ export default {
         save(formName) {
             this.$refs[formName].validate((valid) => {
                 if(valid) {
+                    this.uploading = true
                     let param = new FormData()
                     if (this.musicInfo.lyric) {
                         param.append("lyric", this.musicInfo.lyric)
@@ -218,7 +220,9 @@ export default {
                         } else {
                             this.$message.error(res.msg)
                         }
+                        this.uploading = false
                     }).catch(error => {
+                        this.uploading = false
                         this.$message.error("无法连接到服务器")
                     })
                 } else {

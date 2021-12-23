@@ -14,6 +14,7 @@ import 'mavon-editor/dist/css/index.css'
 import './assets/iconfont/iconfont.css'
 // import clipboard from 'clipboard';
 import APlayer from '@moefe/vue-aplayer';
+import VEmojiPicker from 'v-emoji-picker';
 
 
 Vue.config.productionTip = false;
@@ -24,6 +25,7 @@ Vue.use(vuetimeline);
 Vue.use(APlayer, {
   productionTip: false, // disable console output
 });
+Vue.use(VEmojiPicker);
 
 Vue.prototype.$moment = moment;
 Vue.prototype.axios = axios;

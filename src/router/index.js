@@ -71,6 +71,11 @@ const router = new VueRouter({
           path: '/portal/view',
           name: 'view',
           component: resolve => require(['@/components/portal/View'], resolve)
+        },
+        {
+          path: '/portal/shorthand',
+          name: 'shorthand',
+          component: resolve => require(['@/components/portal/Shorthand'], resolve)
         }
       ]
     },

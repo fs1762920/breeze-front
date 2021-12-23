@@ -42,6 +42,7 @@
                         <el-menu-item index="/portal/home" @click="toDispatch('/portal/home')">首页</el-menu-item>
                         <el-menu-item index="/portal/friend" @click="toDispatch('/portal/friend')">友情链接</el-menu-item>
                         <el-menu-item index="/portal/time" @click="toDispatch('/portal/time')">文章归档</el-menu-item>
+                        <el-menu-item index="/portal/shorthand" @click="toDispatch('/portal/shorthand')">随笔</el-menu-item>
                         <el-menu-item index="/portal/picture" @click="toDispatch('/portal/picture')">照片墙</el-menu-item>
                         <el-menu-item index="/portal/about" @click="toDispatch('/portal/about')">关于</el-menu-item>
                     </el-menu>

@@ -97,16 +97,48 @@
             </el-col>
             <el-col :span="8">
                 <div class="website-item">
-                    <div class="head">
-                        速记
-                        <i class="el-icon-warning-outline"></i>
-                    </div>
-                    <div class="body">
-                        <el-input type="textarea" :maxlength="50" :rows="5" show-word-limit></el-input>
-                    </div>
-                    <div class="foot">
-                        <el-button size="small" type="primary">发表速记</el-button>
-                    </div>
+                    <el-form :model="shorthandInfo" :rules="rules" ref="shorthandForm">
+                        <div class="head">
+                            随笔
+                            <i class="el-icon-warning-outline"></i>
+                        </div>
+                        <div class="body">
+                            <el-form-item prop="">
+                                <el-input v-model="shorthandInfo.content" id="content" type="textarea" :rows="5" show-word-limit></el-input>
+                            </el-form-item>
+                        </div>
+                        <div class="foot">
+                            <el-row>
+                                <el-col :span="18">
+                                    <el-form-item style="width: 100%">
+                                        <el-switch
+                                            v-model="shorthandInfo.hidden"
+                                            active-color="yellowgreen"
+                                            inactive-color="red"
+                                            :active-value="1"
+                                            :inactive-value="2"
+                                            active-text="公开"
+                                            inactive-text="私密">
+                                        </el-switch>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="2">
+                                    <el-button type="text" size="mini" @click="showEmoji = !showEmoji"><i class="iconfont icon-tianjiabiaoqing_fjxjv7"></i></el-button>
+                                    <div class="emoji-group">
+                                        <VEmojiPicker v-show="showEmoji" @select="selectEmoji"/>
+                                    </div>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-button size="small" type="primary" @click="publishShorthand('shorthandForm')">发表随笔</el-button>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2" :offset="8">
+                                    
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </el-form>
                 </div>
             </el-col>
             <el-col :span="8">
@@ -143,7 +175,19 @@ export default {
             total: 0,
             pageSize: 12,
             operationList: [],
-            latestOperationList: []
+            latestOperationList: [],
+            showEmoji: false,
+            shorthandInfo: {
+                hidden: 1
+            },
+            rules: {
+                content: [
+                    { required: true, message: "请输入内容", trigger: 'blur'}
+                ],
+                hidden: [
+                    { required: true, message: "请选择是否公开", trigger: 'blur'}
+                ]
+            }
         }
     },
     mounted() {
@@ -205,6 +249,40 @@ export default {
                 }
             });
             window.open(routeUrl.href, '_blank');
+        },
+        selectEmoji(emoji) {// 选择emoji后调用的函数
+            let input = document.getElementById("content")
+            let startPos = input.selectionStart
+            let endPos = input.selectionEnd
+            let resultText = input.value.substring(0, startPos) + emoji.data + input.value.substring(endPos)
+            input.value = resultText
+            input.focus()
+            input.selectionStart = startPos + emoji.data.length
+            input.selectionEnd = startPos + emoji.data.length
+            this.$set(this.shorthandInfo, 'content', resultText)
+        },
+        publishShorthand(formName) {
+            this.$refs[formName].validate((valid) => {
+                if(valid) {
+                    $post('/shorthand/save', this.shorthandInfo).then(res=>{
+                        if(res.code === 100) {
+                            this.$message.success(res.msg)
+                            this.resetForm(formName)
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(error => {
+                        this.$message.error("无法连接到服务器")
+                    })
+                } else {
+                    return false
+                }
+            })
+        },
+        resetForm(formName) {
+            this.shorthandInfo = {
+                hidden: 1
+            }
         },
         toPage(pageNum) {
             let param = {
@@ -321,12 +399,27 @@ export default {
                         border-bottom: 1px solid rgb(216, 216, 216);
                     }
                     .body {
-                        padding: 20px;
+                        padding: 20px 20px 0 20px;
                     }
                     .foot {
-                        padding: 0 20px 50px 20px;
+                        padding: 0 20px 0 20px;
                         .el-button {
                             float: right;
+                            margin-top: 5px;
+                            .icon-tianjiabiaoqing_fjxjv7 {
+                                color: #fdbd1b;
+                                font-size: 1.8rem;
+                                line-height: 20px;
+                            }
+                        }
+                        .emoji-group {
+                            margin-top: 40px;
+                            position: absolute;
+                            right: 80px;
+                            z-index: 2048;
+                            .emoji-picker {
+                                background-color: rgb(250, 250, 250);
+                            }
                         }
                     }
                     /deep/.el-card__header {

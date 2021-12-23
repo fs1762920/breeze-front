@@ -17,7 +17,7 @@
                 multiple
                 :limit=5>
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="upload" :disabled="selectedFile.length==0">上传到服务器</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="upload" :disabled="selectedFile.length==0" :loading="uploading">{{uploading? "上传中" : "上传到服务器"}}</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
             </el-upload>
         </el-dialog>
@@ -90,7 +90,8 @@ export default {
             photoDetailShow: false,
             selectedFile: [],
             fileList: [],
-            showUpload: false
+            showUpload: false,
+            uploading: false
         }
     },
     mounted() {
@@ -152,24 +153,24 @@ export default {
             this.selectedFile.splice(this.fileList.indexOf(file), 1)
         },
         upload() {
+            this.uploading = true
             let param = new FormData()
             this.selectedFile.forEach(item => {
                 param.append("files", item)
             })
-            this.showUpload = false
-            this.fileList = []
-            this.selectedFile = []
             $post("/photo/upload", param).then(res=>{
                 if(res.code === 100) {
-                    this.showUpload = false
                     this.$message.success(res.msg)
+                    this.showUpload = false
                     this.fileList = []
                     this.selectedFile = []
                     this.toPage(1)
                 } else {
                     this.$message.error(res.msg)
                 }
+                this.uploading = false
             }).catch(error => {
+                this.uploading = false
                 this.$message.error("无法连接到服务器")
             });
         },

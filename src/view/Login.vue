@@ -33,13 +33,19 @@ export default {
                 password: [
                     { required: true, message: "请输入密码", trigger: 'blur'}
                 ]
-            }
+            },
+            // publicKey: ''
         }
     },
+    // mounted() {
+    //     this.getPublicKey()
+    // },
     methods: {
         login(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    // let password = this.encrypt(this.loginInfo.password)
+                    // this.$set(this.loginInfo, 'password', password)
                     $post("/user/login", this.loginInfo).then(res=>{
                         if(res.code === 100) {
                             localStorage.setItem("satoken", res.data.token);
@@ -54,7 +60,25 @@ export default {
                     return false;
                 }
             });
-        }
+        },
+        // getPublicKey() {
+        //     $get("/user/getPublicKey", null).then(res=>{
+        //         if(res.code === 100) {
+        //             this.publicKey = res.data
+        //         } else {
+        //             this.$message.error(res.msg)
+        //         }
+        //     }).catch(error => {
+        //         this.$message.error("无法连接到服务器!")
+        //     })
+        // },
+        // encrypt(password) {
+        //     var encrypt = new JSEncrypt();
+        //     // encrypt.setPublicKey('-----BEGIN PUBLIC KEY-----' + this.publicKey + '-----END PUBLIC KEY-----')
+        //     console.log(this.publicKey)
+        //     encrypt.setPublicKey(this.publicKey)
+        //     return encrypt.encrypt(password)
+        // }
     }
 }
 </script>

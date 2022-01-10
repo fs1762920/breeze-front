@@ -89,6 +89,12 @@ export default {
                 pageNum: pageNum,
                 pageSize: this.pageSize
             }
+            if (this.$route.query.classifyId) {
+                this.$set(param, 'classifyId', this.$route.query.classifyId)
+            }
+            if (this.$route.query.labelId) {
+                this.$set(param, 'labelId', this.$route.query.labelId)
+            }
             this.loadData(param)
         },
         dateFormat(date){

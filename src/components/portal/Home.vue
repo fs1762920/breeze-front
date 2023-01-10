@@ -16,7 +16,7 @@
                     <span>{{dateFormat(item.mtime)}}&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span><el-tag size="mini">{{item.classifyEntity.classifyName}}</el-tag></span>
                 </div>
-                <div class="title">
+                <div class="title" @click="blogOverview(item.blogId)">
                     {{item.title}}
                 </div>
                 <div class="description">

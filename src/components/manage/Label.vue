@@ -4,7 +4,7 @@
             <div class="label-form">
                 <div class="title">添加标签</div>
                 <div class="body">
-                    <el-form ref="labelForm" :model="labelInfo" :rules="rules" label-width="80px">
+                    <el-form ref="labelForm" :model="labelInfo" :rules="rules" label-width="96px">
                         <el-form-item v-show="false" label="标签id" prop="labelId">
                             <el-input type="text" v-model="labelInfo.labelId" autocomplete="off"></el-input>
                         </el-form-item>

@@ -333,7 +333,7 @@ export default {
             line-height: 40px;
             display: flex;
             .label {
-                width: 64px;
+                width: 80px;
                 font-weight: 600;
             }
             .content {

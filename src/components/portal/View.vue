@@ -63,7 +63,7 @@
                         <div class="comment-item" v-for="(commentItem, commentIndex) in commentList" :key="commentIndex">
                             <div class="comment-item-inner">
                                 <div class="comment-item-avatar">
-                                    <el-avatar size="medium" :src="commentItem.srcAvatarPath.startsWith('http')?commentItem.srcAvatarPath : sourceUrlPrefix + commentItem.srcAvatarPath"></el-avatar>
+                                    <el-avatar size="medium" :src="commentItem.srcAvatarPath && commentItem.srcAvatarPath.startsWith('http') ? commentItem.srcAvatarPath : (commentItem.srcAvatarPath ? sourceUrlPrefix + commentItem.srcAvatarPath : commentItem.srcAvatarPath)"></el-avatar>
                                 </div>
                                 <div class="comment-item-body">
                                     <span>
@@ -372,6 +372,9 @@ export default {
                     return false
                 }
             });
+        },
+        resetForm(formName) { 
+            this.$refs[formName].resetFields()
         },
         submitReply(formName) {
             this.$refs[formName][0].validate((valid) => {

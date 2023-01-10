@@ -4,7 +4,7 @@
             <div class="classify-form">
                 <div class="title">添加分类</div>
                 <div class="body">
-                    <el-form ref="classifyForm" :model="classifyInfo" :rules="rules" label-width="80px">
+                    <el-form ref="classifyForm" :model="classifyInfo" :rules="rules" label-width="96px">
                         <el-form-item v-show="false" label="分类id" prop="classifyId">
                             <el-input type="text" v-model="classifyInfo.classifyId" autocomplete="off"></el-input>
                         </el-form-item>

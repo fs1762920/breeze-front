@@ -112,7 +112,6 @@ export default {
             box-shadow: 1px 1px 8px #c7c7c7;
             .cover {
                 height: 18vw;
-                cursor: pointer;
                 .el-image {
                     width: 100%;
                     height: 100%;
